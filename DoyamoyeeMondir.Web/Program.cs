@@ -27,10 +27,12 @@ builder.Services.AddScoped<
 
 builder.Services.AddApplication();
 
-builder.Services.AddInfrastructure(
-    builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+await DoyamoyeeMondir.Infrastructure.Persistence.Seed
+    .ApplicationDbContextSeeder.InitialiseAsync(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {

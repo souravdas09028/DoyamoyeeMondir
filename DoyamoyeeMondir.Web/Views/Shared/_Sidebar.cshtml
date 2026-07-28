@@ -1,0 +1,338 @@
+﻿@{
+    var currentController =
+        ViewContext.RouteData.Values["controller"]?.ToString();
+
+    var currentAction =
+        ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<aside class="navbar navbar-vertical navbar-expand-lg temple-sidebar"
+       data-bs-theme="dark">
+
+    <div class="container-fluid">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-menu"
+                aria-controls="sidebar-menu"
+                aria-expanded="false"
+                aria-label="মেনু খুলুন">
+
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <h1 class="navbar-brand navbar-brand-autodark">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="temple-brand">
+
+                <span class="temple-brand-icon">
+                    <i class="ti ti-building-pavilion"></i>
+                </span>
+
+                <span class="temple-brand-text">
+                    <span class="temple-name">
+                        দয়াময়ী মন্দির
+                    </span>
+
+                    <span class="temple-subtitle">
+                        ব্যবস্থাপনা সিস্টেম
+                    </span>
+                </span>
+            </a>
+        </h1>
+
+        <div class="collapse navbar-collapse"
+             id="sidebar-menu">
+
+            <ul class="navbar-nav pt-lg-3">
+
+                <li class="nav-item">
+                    <a class="nav-link @(currentController == "Home" ? "active" : "")"
+                       asp-controller="Home"
+                       asp-action="Index">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-layout-dashboard"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            ড্যাশবোর্ড
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#navbar-members"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="false"
+                       role="button"
+                       aria-expanded="false">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-users"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            সদস্য ও দাতা
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            সদস্য তালিকা
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            নতুন সদস্য
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            দাতা তালিকা
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            বকেয়া চাঁদা
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#navbar-committee"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="false">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-users-group"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            কমিটি
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            কমিটি তালিকা
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            নতুন কমিটি
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            কমিটির সদস্য
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#navbar-income"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="false">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-cash-banknote"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            আয়
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            নতুন আয়
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            অনুদান
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            চাঁদা সংগ্রহ
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            ফি সংগ্রহ
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#navbar-expense"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="false">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-receipt-2"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            ব্যয়
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            নতুন ব্যয়
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            বিল
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            পেমেন্ট ভাউচার
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="nav-link-icon">
+                            <i class="ti ti-flame"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            পূজা ও অনুষ্ঠান
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="nav-link-icon">
+                            <i class="ti ti-bowl-spoon"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            প্রসাদ বিক্রয়
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#navbar-inventory"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="false">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-package"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            ইনভেন্টরি
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            পণ্যের তালিকা
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            স্টক গ্রহণ
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            স্টক ব্যবহার
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            বর্তমান স্টক
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="nav-link-icon">
+                            <i class="ti ti-diamond"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            সম্পদ ও অলংকার
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="nav-link-icon">
+                            <i class="ti ti-user-dollar"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            কর্মচারী ও বেতন
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="nav-link-icon">
+                            <i class="ti ti-files"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            দলিল ও নথি
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="nav-link-icon">
+                            <i class="ti ti-chart-bar"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            রিপোর্ট
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown mt-auto">
+                    <a class="nav-link dropdown-toggle"
+                       href="#navbar-settings"
+                       data-bs-toggle="dropdown"
+                       data-bs-auto-close="false">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-settings"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            সেটিংস
+                        </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            ব্যবহারকারী
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            ভূমিকা ও অনুমতি
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            হিসাবের বছর
+                        </a>
+
+                        <a class="dropdown-item" href="#">
+                            সিস্টেম সেটিংস
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</aside>

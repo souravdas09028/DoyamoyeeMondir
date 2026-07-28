@@ -1,0 +1,65 @@
+﻿@if (TempData["SuccessMessage"] is not null)
+{
+    <div class="alert alert-success alert-dismissible"
+         role="alert">
+
+        <div class="d-flex">
+            <div>
+                <i class="ti ti-circle-check fs-2 me-2"></i>
+            </div>
+
+            <div>
+                @TempData["SuccessMessage"]
+            </div>
+        </div>
+
+        <a class="btn-close"
+           data-bs-dismiss="alert"
+           aria-label="বন্ধ করুন">
+        </a>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is not null)
+{
+    <div class="alert alert-danger alert-dismissible"
+         role="alert">
+
+        <div class="d-flex">
+            <div>
+                <i class="ti ti-alert-circle fs-2 me-2"></i>
+            </div>
+
+            <div>
+                @TempData["ErrorMessage"]
+            </div>
+        </div>
+
+        <a class="btn-close"
+           data-bs-dismiss="alert"
+           aria-label="বন্ধ করুন">
+        </a>
+    </div>
+}
+
+@if (TempData["WarningMessage"] is not null)
+{
+    <div class="alert alert-warning alert-dismissible"
+         role="alert">
+
+        <div class="d-flex">
+            <div>
+                <i class="ti ti-alert-triangle fs-2 me-2"></i>
+            </div>
+
+            <div>
+                @TempData["WarningMessage"]
+            </div>
+        </div>
+
+        <a class="btn-close"
+           data-bs-dismiss="alert"
+           aria-label="বন্ধ করুন">
+        </a>
+    </div>
+}

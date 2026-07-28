@@ -1,0 +1,303 @@
+﻿:root {
+    --temple-primary: #7a1f2b;
+    --temple-primary-dark: #54131c;
+    --temple-primary-soft: #f7e8eb;
+    --temple-secondary: #d18a18;
+    --temple-secondary-dark: #a6660d;
+    --temple-secondary-soft: #fff3d8;
+    --temple-background: #f7f4ef;
+    --temple-surface: #ffffff;
+    --temple-text: #292524;
+    --temple-muted: #78716c;
+    --temple-border: #e8e2d8;
+    --temple-sidebar-width: 270px;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    font-family: "Noto Sans Bengali", "Hind Siliguri", "Segoe UI", sans-serif;
+    background: radial-gradient( circle at top right, rgba(209, 138, 24, 0.08), transparent 30% ), var(--temple-background);
+    color: var(--temple-text);
+}
+
+.temple-sidebar {
+    --tblr-navbar-bg: var(--temple-primary-dark);
+    width: var(--temple-sidebar-width);
+    border-right: 0;
+    box-shadow: 8px 0 24px rgba(61, 23, 29, 0.12);
+}
+
+    .temple-sidebar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient( circle at 20% 10%, rgba(255, 208, 102, 0.12), transparent 22% ), linear-gradient( 180deg, rgba(255, 255, 255, 0.03), transparent 35% );
+    }
+
+    .temple-sidebar .container-fluid {
+        position: relative;
+        z-index: 1;
+    }
+
+.temple-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+    .temple-brand:hover {
+        color: #ffffff;
+    }
+
+.temple-brand-icon {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 14px;
+    color: var(--temple-primary-dark);
+    background: linear-gradient( 135deg, #ffe29a, #d69b28 );
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+    .temple-brand-icon i {
+        font-size: 27px;
+    }
+
+.temple-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.temple-name {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+.temple-subtitle {
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.72;
+}
+
+.temple-sidebar .navbar-nav {
+    gap: 4px;
+}
+
+.temple-sidebar .nav-link {
+    margin: 0 10px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.78);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+    .temple-sidebar .nav-link:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.09);
+        transform: translateX(2px);
+    }
+
+    .temple-sidebar .nav-link.active {
+        color: #ffffff;
+        background: linear-gradient( 135deg, rgba(209, 138, 24, 0.96), rgba(175, 104, 15, 0.96) );
+        box-shadow: 0 8px 18px rgba(30, 5, 10, 0.25);
+    }
+
+.temple-sidebar .nav-link-icon {
+    color: inherit;
+}
+
+    .temple-sidebar .nav-link-icon i {
+        font-size: 20px;
+    }
+
+.temple-sidebar .dropdown-menu {
+    margin: 5px 12px 8px 46px;
+    padding: 5px;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.14);
+    box-shadow: none;
+}
+
+.temple-sidebar .dropdown-item {
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+}
+
+    .temple-sidebar .dropdown-item:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+.temple-topbar {
+    min-height: 68px;
+    background: rgba(255, 255, 255, 0.91);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--temple-border);
+    box-shadow: 0 5px 18px rgba(52, 37, 27, 0.04);
+}
+
+.page-body {
+    padding-top: 24px;
+}
+
+.page-title {
+    color: var(--temple-text);
+    font-weight: 800;
+}
+
+.card {
+    border: 1px solid rgba(232, 226, 216, 0.8);
+    border-radius: 16px;
+    background: var(--temple-surface);
+    box-shadow: 0 8px 28px rgba(61, 45, 33, 0.06);
+}
+
+.card-header {
+    min-height: 60px;
+    border-bottom-color: var(--temple-border);
+}
+
+.card-title {
+    color: var(--temple-text);
+    font-weight: 700;
+}
+
+.btn-temple {
+    color: #ffffff;
+    background: linear-gradient( 135deg, var(--temple-primary), var(--temple-primary-dark) );
+    border: none;
+    box-shadow: 0 7px 16px rgba(122, 31, 43, 0.22);
+}
+
+    .btn-temple:hover,
+    .btn-temple:focus {
+        color: #ffffff;
+        background: linear-gradient( 135deg, #8d2634, #661824 );
+    }
+
+.btn-gold {
+    color: #3b2706;
+    background: linear-gradient( 135deg, #f2c15c, #d8941f );
+    border: none;
+}
+
+.temple-avatar {
+    color: #ffffff;
+    font-weight: 700;
+    background: linear-gradient( 135deg, var(--temple-primary), var(--temple-secondary) );
+}
+
+.temple-stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+    .temple-stat-card::after {
+        content: "";
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        right: -30px;
+        top: -35px;
+        border-radius: 50%;
+        background: rgba(209, 138, 24, 0.08);
+    }
+
+.temple-stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 25px;
+}
+
+    .temple-stat-icon.income {
+        color: #15803d;
+        background: #dcfce7;
+    }
+
+    .temple-stat-icon.expense {
+        color: #b91c1c;
+        background: #fee2e2;
+    }
+
+    .temple-stat-icon.member {
+        color: #1d4ed8;
+        background: #dbeafe;
+    }
+
+    .temple-stat-icon.stock {
+        color: #a16207;
+        background: #fef3c7;
+    }
+
+.form-control,
+.form-select {
+    min-height: 44px;
+    border-color: var(--temple-border);
+    border-radius: 9px;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: rgba(122, 31, 43, 0.45);
+        box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.1);
+    }
+
+.table thead th {
+    color: var(--temple-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: none;
+}
+
+.footer {
+    border-top: 1px solid var(--temple-border);
+}
+
+[data-bs-theme="dark"] body {
+    --temple-background: #181615;
+    --temple-surface: #24201e;
+    --temple-text: #f5f1eb;
+    --temple-muted: #b9afa3;
+    --temple-border: #39322e;
+}
+
+@media (min-width: 992px) {
+    .navbar-vertical.navbar-expand-lg {
+        width: var(--temple-sidebar-width);
+    }
+
+        .navbar-vertical.navbar-expand-lg ~ .page-wrapper {
+            margin-left: var(--temple-sidebar-width);
+        }
+}
+
+@media (max-width: 991.98px) {
+    .temple-sidebar {
+        width: 100%;
+    }
+
+        .temple-sidebar .dropdown-menu {
+            margin-left: 20px;
+        }
+}

@@ -1,0 +1,153 @@
+﻿@using DoyamoyeeMondir.Infrastructure.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ApplicationUser? currentUser = null;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        currentUser = await UserManager.GetUserAsync(User);
+    }
+
+    var displayName =
+        currentUser?.NameBn
+        ?? currentUser?.NameEn
+        ?? User.Identity?.Name
+        ?? "ব্যবহারকারী";
+}
+
+<header class="navbar navbar-expand-md d-print-none temple-topbar">
+    <div class="container-xl">
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbar-menu">
+
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-nav flex-row order-md-last ms-auto">
+
+            <div class="nav-item d-none d-md-flex me-3">
+                <div class="btn-list">
+                    <button type="button"
+                            class="btn btn-icon btn-ghost-secondary"
+                            title="পূর্ণ পর্দা"
+                            onclick="toggleFullScreen()">
+
+                        <i class="ti ti-maximize"></i>
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-icon btn-ghost-secondary"
+                            title="থিম পরিবর্তন করুন"
+                            onclick="toggleTheme()">
+
+                        <i class="ti ti-moon"
+                           id="theme-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-item dropdown d-none d-md-flex me-3">
+                <a href="#"
+                   class="nav-link px-0"
+                   data-bs-toggle="dropdown"
+                   tabindex="-1"
+                   aria-label="নোটিফিকেশন">
+
+                    <i class="ti ti-bell fs-2"></i>
+
+                    <span class="badge bg-red"></span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                নোটিফিকেশন
+                            </h3>
+                        </div>
+
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item">
+                                <div class="text-muted">
+                                    এই মুহূর্তে কোনো নতুন নোটিফিকেশন নেই।
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item dropdown">
+                <a href="#"
+                   class="nav-link d-flex lh-1 text-reset p-0"
+                   data-bs-toggle="dropdown"
+                   aria-label="ব্যবহারকারী মেনু">
+
+                    <span class="avatar avatar-sm temple-avatar">
+                        @displayName.Substring(0, 1)
+                    </span>
+
+                    <div class="d-none d-xl-block ps-2">
+                        <div>@displayName</div>
+
+                        <div class="mt-1 small text-muted">
+                            @User.Identity?.Name
+                        </div>
+                    </div>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+
+                    <a class="dropdown-item"
+                       asp-area="Identity"
+                       asp-page="/Account/Manage/Index">
+
+                        <i class="ti ti-user me-2"></i>
+                        আমার প্রোফাইল
+                    </a>
+
+                    <a class="dropdown-item"
+                       asp-area="Identity"
+                       asp-page="/Account/Manage/ChangePassword">
+
+                        <i class="ti ti-lock me-2"></i>
+                        পাসওয়ার্ড পরিবর্তন
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <form asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                          method="post">
+
+                        <button type="submit"
+                                class="dropdown-item text-danger">
+
+                            <i class="ti ti-logout me-2"></i>
+                            লগআউট
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse navbar-collapse"
+             id="navbar-menu">
+
+            <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+
+                <div class="page-pretitle">
+                    মন্দির প্রশাসন
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
