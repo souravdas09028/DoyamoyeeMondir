@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DoyamoyeeMondir.Application/DoyamoyeeMondir.Application.csproj" />
+  <Project Path="DoyamoyeeMondir.Domain/DoyamoyeeMondir.Domain.csproj" />
+  <Project Path="DoyamoyeeMondir.Infrastructure/DoyamoyeeMondir.Infrastructure.csproj" />
+  <Project Path="DoyamoyeeMondir.Web/DoyamoyeeMondir.Web.csproj" />
+</Solution>
