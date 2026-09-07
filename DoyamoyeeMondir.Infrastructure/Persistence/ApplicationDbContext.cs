@@ -19,6 +19,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Person> Persons => Set<Person>();
+    public DbSet<Membership> Memberships => Set<Membership>();
+    public DbSet<Income> Incomes => Set<Income>();
+    public DbSet<Expense> Expenses => Set<Expense>();
+    public DbSet<MembershipType> MembershipTypes => Set<MembershipType>();
+    public DbSet<TempleService> TempleServices => Set<TempleService>();
 
     public DbSet<IncomeCategory> IncomeCategories =>
         Set<IncomeCategory>();

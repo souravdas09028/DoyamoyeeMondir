@@ -1,0 +1,32 @@
+@model List<DoyamoyeeMondir.Web.Models.SettingForm>
+@{
+    string kind = ViewBag.Kind;
+    ViewData["Title"] = kind switch { "membership" => "সদস্যপদের ধরন", "service" => "সেবার মূল্য ও বণ্টন", "income" => "আয়ের খাত", "account" => "নগদ ও ব্যাংক হিসাব", _ => "ব্যয়ের ধরন" };
+}
+<div class="container-xl py-4">
+    <h1>@ViewData["Title"]</h1>
+    <nav class="nav nav-pills gap-2 my-3" aria-label="সেটিংস">
+        <a class="nav-link @(kind == "membership" ? "active" : "")" asp-action="Index" asp-route-kind="membership">সদস্যপদের ধরন</a>
+        <a class="nav-link @(kind == "service" ? "active" : "")" asp-action="Index" asp-route-kind="service">সেবার মূল্য ও বণ্টন</a>
+        <a class="nav-link @(kind == "expense" ? "active" : "")" asp-action="Index" asp-route-kind="expense">ব্যয়ের ধরন</a>
+    </nav>
+    <nav class="nav nav-pills gap-2 mb-3" aria-label="আয়ের সেটিংস">
+        <a class="nav-link @(kind == "income" ? "active" : "")" asp-action="Index" asp-route-kind="income">আয়ের খাত</a>
+        <a class="nav-link @(kind == "account" ? "active" : "")" asp-action="Index" asp-route-kind="account">নগদ ও ব্যাংক হিসাব</a>
+    </nav>
+    @if (TempData["SettingsSuccess"] is string message) { <div class="alert alert-success" role="status">@message</div> }
+    <a class="btn btn-primary mb-3" asp-action="Edit" asp-route-kind="@kind">নতুন যোগ করুন</a>
+    <div class="card table-responsive">
+        <table class="table table-vcenter"><thead><tr><th>নাম</th><th>@(kind == "income" ? "কোড" : kind == "account" ? "প্রারম্ভিক স্থিতি (টাকা)" : kind == "expense" ? "অনুমোদন" : "পরিমাণ (টাকা)")</th>@if (kind == "service") { <th>মন্দির / পুরোহিত / কর্মচারী</th> }<th>অবস্থা</th><th>কাজ</th></tr></thead>
+        <tbody>
+        @foreach (var row in Model)
+        {
+            <tr><td>@row.NameBn @if(kind == "expense") { <small>(@row.Code)</small> }</td>
+                <td>@(kind == "income" ? row.Code : kind == "expense" ? (row.RequiresApproval ? "প্রয়োজন" : "প্রয়োজন নেই") : row.Amount.ToString("N2"))</td>
+                @if(kind == "service") { <td>@row.TempleShare.ToString("N2") / @row.PriestShare.ToString("N2") / @row.StaffShare.ToString("N2")</td> }
+                <td>@(row.IsActive ? "সক্রিয়" : "নিষ্ক্রিয়")</td><td><a asp-action="Edit" asp-route-kind="@kind" asp-route-id="@row.Id">সম্পাদনা</a></td></tr>
+        }
+        @if(Model.Count == 0) { <tr><td colspan="5" class="text-center py-4">এখনো কোনো তথ্য যোগ করা হয়নি।</td></tr> }
+        </tbody></table>
+    </div>
+</div>

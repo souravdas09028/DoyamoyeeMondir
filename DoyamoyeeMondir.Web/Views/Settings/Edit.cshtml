@@ -1,0 +1,37 @@
+@model DoyamoyeeMondir.Web.Models.SettingForm
+@{ ViewData["Title"] = Model.Id == 0 ? "নতুন তথ্য" : "তথ্য সম্পাদনা"; }
+<div class="container-xl py-4">
+    <h1>@ViewData["Title"]</h1>
+    <form asp-action="Edit" method="post" class="card card-body mt-3" style="max-width: 720px">
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        <input asp-for="Id" type="hidden" /><input asp-for="Kind" type="hidden" /><input asp-for="RowVersion" type="hidden" />
+        <div class="mb-3"><label asp-for="NameBn" class="form-label"></label><input asp-for="NameBn" class="form-control" /><span asp-validation-for="NameBn" class="text-danger"></span></div>
+        @if (Model.Kind is "expense" or "income" or "account")
+        {
+            <div class="mb-3"><label asp-for="Code" class="form-label"></label><input asp-for="Code" class="form-control" /></div>
+        }
+        @if (Model.Kind == "expense")
+        {
+            <label class="form-check mb-3"><input asp-for="RequiresApproval" class="form-check-input" /><span class="form-check-label">অ্যাডমিনের অনুমোদন প্রয়োজন</span></label>
+        }
+        @if (Model.Kind is "membership" or "service" or "account")
+        {
+            <div class="mb-3"><label asp-for="Amount" class="form-label"></label><input asp-for="Amount" type="number" min="0" step="0.01" class="form-control" /></div>
+        }
+        @if (Model.Kind == "account")
+        {
+            <p>উপরের পরিমাণটি প্রারম্ভিক স্থিতি।</p>
+            <label asp-for="OpeningDate" class="form-label">হিসাবের শুরুর তারিখ (গ্রেগরিয়ান)</label><input asp-for="OpeningDate" type="date" class="form-control mb-3" />
+            <label class="form-check mb-3"><input asp-for="IsCashAccount" class="form-check-input" /><span class="form-check-label">নগদ হিসাব</span></label>
+        }
+        @if (Model.Kind == "service")
+        {
+            <p class="text-secondary">প্রতিটি অংশ টাকায় লিখুন। তিনটি অংশের যোগফল মোট মূল্যের সমান হতে হবে।</p>
+            <div class="mb-3"><label asp-for="TempleShare" class="form-label"></label><input asp-for="TempleShare" type="number" min="0" step="0.01" class="form-control" /></div>
+            <div class="mb-3"><label asp-for="PriestShare" class="form-label"></label><input asp-for="PriestShare" type="number" min="0" step="0.01" class="form-control" /></div>
+            <div class="mb-3"><label asp-for="StaffShare" class="form-label"></label><input asp-for="StaffShare" type="number" min="0" step="0.01" class="form-control" /></div>
+        }
+        <label class="form-check mb-3"><input asp-for="IsActive" class="form-check-input" /><span class="form-check-label">সক্রিয়</span></label>
+        <div class="d-flex gap-2"><button class="btn btn-primary" type="submit">সংরক্ষণ করুন</button><a class="btn btn-outline-secondary" asp-action="Index" asp-route-kind="@Model.Kind">তালিকায় ফিরুন</a></div>
+    </form>
+</div>

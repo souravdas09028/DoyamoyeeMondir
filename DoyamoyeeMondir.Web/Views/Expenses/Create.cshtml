@@ -1,0 +1,13 @@
+@model DoyamoyeeMondir.Web.Models.ExpenseForm
+@{ ViewData["Title"] = "নতুন ব্যয়"; }
+<div class="container-xl py-4"><h1>নতুন ব্যয়</h1>
+<form asp-action="Create" method="post" class="card card-body" style="max-width:720px">
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<input asp-for="SubmissionKey" type="hidden" />
+<label asp-for="ExpenseCategoryId" class="form-label">ব্যয়ের ধরন</label><select asp-for="ExpenseCategoryId" asp-items="ViewBag.Categories" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
+<label asp-for="Date" class="form-label">তারিখ (গ্রেগরিয়ান)</label><input asp-for="Date" type="date" class="form-control mb-3" />
+<label asp-for="Amount" class="form-label">পরিমাণ (টাকা)</label><input asp-for="Amount" type="number" min="0.01" step="0.01" class="form-control mb-3" />
+<label asp-for="Description" class="form-label">বিবরণ</label><textarea asp-for="Description" class="form-control mb-3"></textarea>
+<p>ব্যয়ের ধরন অনুযায়ী প্রয়োজন হলে অ্যাডমিনের অনুমোদনের জন্য পাঠানো হবে।</p>
+<div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">তালিকায় ফিরুন</a></div>
+</form></div>

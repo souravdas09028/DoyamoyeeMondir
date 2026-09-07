@@ -1,0 +1,10 @@
+@model List<DoyamoyeeMondir.Domain.Entities.Membership>
+@{ ViewData["Title"] = "সদস্যপদ ও বকেয়া"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1>
+<div class="d-flex flex-wrap gap-2 my-3"><a asp-action="Create" class="btn btn-primary">নতুন সদস্যপদ</a><a asp-action="Index" class="btn btn-outline-primary">সব সদস্যপদ</a><a asp-action="Index" asp-route-dueOnly="true" class="btn btn-outline-primary">শুধু বকেয়া</a></div>
+<div class="card table-responsive"><table class="table"><thead><tr><th>ব্যক্তি / ধরন</th><th>মেয়াদ</th><th>নির্ধারিত টাকা</th><th>সংগৃহীত</th><th>বকেয়া</th><th>কাজ</th></tr></thead><tbody>
+@foreach(var m in Model) { <tr><td>@m.Person.NameBn<br/>@m.TypeName</td><td>@m.StartDate.ToString("yyyy-MM-dd") — @(m.EndDate?.ToString("yyyy-MM-dd") ?? "নির্ধারিত নয়")</td><td>@m.AgreedAmount.ToString("N2")</td><td>@m.CollectedAmount.ToString("N2")</td><td>@m.Outstanding.ToString("N2")</td><td>@if(m.Outstanding > 0) { <a asp-controller="Income" asp-action="Create" asp-route-membershipId="@m.Id">চাঁদা সংগ্রহ</a><span> · </span> }<a asp-controller="Income" asp-action="Index" asp-route-membershipId="@m.Id">ইতিহাস</a></td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="6">কোনো সদস্যপদ পাওয়া যায়নি।</td></tr> }
+</tbody></table></div>
+<nav class="d-flex gap-3 mt-3" aria-label="পৃষ্ঠা">@if(ViewBag.Page > 1) { <a asp-route-dueOnly="@ViewBag.DueOnly" asp-route-page="@(ViewBag.Page - 1)">আগের পৃষ্ঠা</a> } @if(ViewBag.HasNext) { <a asp-route-dueOnly="@ViewBag.DueOnly" asp-route-page="@(ViewBag.Page + 1)">পরের পৃষ্ঠা</a> }</nav>
+</div>

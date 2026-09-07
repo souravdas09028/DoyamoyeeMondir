@@ -4,6 +4,7 @@ using DoyamoyeeMondir.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoyamoyeeMondir.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260907195043_ConfigurableSettingsAndExpenses")]
+    partial class ConfigurableSettingsAndExpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,136 +255,6 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                     b.ToTable("ExpenseCategories", (string)null);
                 });
 
-            modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.Income", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AccountName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("CashBankAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("IncomeCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("MembershipId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PayerName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("PriestShare")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Reference")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<string>("ServiceName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<decimal>("StaffShare")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("SubmissionKey")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("TempleServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TempleShare")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CashBankAccountId");
-
-                    b.HasIndex("Date");
-
-                    b.HasIndex("IncomeCategoryId");
-
-                    b.HasIndex("MembershipId");
-
-                    b.HasIndex("PersonId");
-
-                    b.HasIndex("SubmissionKey")
-                        .IsUnique();
-
-                    b.HasIndex("TempleServiceId");
-
-                    b.ToTable("Incomes", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Income_Amount", "[Amount] > 0");
-
-                            t.HasCheckConstraint("CK_Income_Shares", "[TempleShare] >= 0 AND [PriestShare] >= 0 AND [StaffShare] >= 0 AND ([TempleServiceId] IS NULL OR [Amount] = [TempleShare] + [PriestShare] + [StaffShare])");
-
-                            t.HasCheckConstraint("CK_Income_Source", "[MembershipId] IS NULL OR [TempleServiceId] IS NULL");
-                        });
-                });
-
             modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.IncomeCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -443,87 +316,6 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("IncomeCategories", (string)null);
-                });
-
-            modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.Membership", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("AgreedAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CollectedAmount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly?>("EndDate")
-                        .HasColumnType("date");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MembershipTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("SubmissionKey")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MembershipTypeId");
-
-                    b.HasIndex("SubmissionKey")
-                        .IsUnique();
-
-                    b.HasIndex("PersonId", "MembershipTypeId", "StartDate")
-                        .IsUnique();
-
-                    b.ToTable("Memberships", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Membership_Amounts", "[AgreedAmount] >= 0 AND [CollectedAmount] >= 0 AND [CollectedAmount] <= [AgreedAmount]");
-
-                            t.HasCheckConstraint("CK_Membership_Dates", "[EndDate] IS NULL OR [EndDate] >= [StartDate]");
-                        });
                 });
 
             modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.MembershipType", b =>
@@ -964,65 +756,6 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("ExpenseCategory");
-                });
-
-            modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.Income", b =>
-                {
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.CashBankAccount", "CashBankAccount")
-                        .WithMany()
-                        .HasForeignKey("CashBankAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.IncomeCategory", "IncomeCategory")
-                        .WithMany()
-                        .HasForeignKey("IncomeCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.Membership", "Membership")
-                        .WithMany()
-                        .HasForeignKey("MembershipId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.TempleService", "TempleService")
-                        .WithMany()
-                        .HasForeignKey("TempleServiceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CashBankAccount");
-
-                    b.Navigation("IncomeCategory");
-
-                    b.Navigation("Membership");
-
-                    b.Navigation("Person");
-
-                    b.Navigation("TempleService");
-                });
-
-            modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.Membership", b =>
-                {
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.MembershipType", "MembershipType")
-                        .WithMany()
-                        .HasForeignKey("MembershipTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DoyamoyeeMondir.Domain.Entities.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("MembershipType");
-
-                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

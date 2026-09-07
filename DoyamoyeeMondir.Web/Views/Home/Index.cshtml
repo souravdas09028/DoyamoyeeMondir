@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "ড্যাশবোর্ড";
 }
+@model DoyamoyeeMondir.Web.Models.DashboardSummary
 
 <div class="container py-5">
     <div class="text-center">
@@ -18,7 +19,7 @@
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="card-title">আজকের আয়</h5>
-                    <h3>৳ ০.০০</h3>
+                    <h3>৳ @Model.TodayIncome.ToString("N2")</h3>
                 </div>
             </div>
         </div>
@@ -26,8 +27,8 @@
         <div class="col-md-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title">আজকের ব্যয়</h5>
-                    <h3>৳ ০.০০</h3>
+                    <h5 class="card-title">আজকের অনুমোদিত ব্যয়</h5>
+                    <h3>৳ @Model.TodayExpenses.ToString("N2")</h3>
                 </div>
             </div>
         </div>
@@ -35,8 +36,8 @@
         <div class="col-md-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title">মোট সদস্য</h5>
-                    <h3>০</h3>
+                    <h5 class="card-title">বর্তমান সদস্য</h5>
+                    <h3>@Model.MemberCount</h3>
                 </div>
             </div>
         </div>
@@ -44,8 +45,8 @@
         <div class="col-md-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title">বর্তমান স্টক</h5>
-                    <h3>০</h3>
+                    <h5 class="card-title">অনুমোদনের অপেক্ষায়</h5>
+                    <h3>@Model.PendingCount</h3>
                 </div>
             </div>
         </div>

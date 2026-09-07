@@ -1,0 +1,16 @@
+@using DoyamoyeeMondir.Domain.Enums
+@model List<DoyamoyeeMondir.Domain.Entities.Expense>
+@{ ViewData["Title"] = "ব্যয়ের তালিকা"; }
+<div class="container-xl py-4"><h1>ব্যয়ের তালিকা</h1>
+<a asp-action="Create" class="btn btn-primary my-3">নতুন ব্যয়</a>
+<p>অনুমোদিত ব্যয়: @Model.Where(x => x.Status == ApprovalStatus.Approved).Sum(x => x.Amount).ToString("N2") টাকা</p>
+<div class="table-responsive card"><table class="table"><thead><tr><th>তারিখ</th><th>ধরন / বিবরণ</th><th>টাকা</th><th>অবস্থা</th><th>পর্যালোচনা</th></tr></thead><tbody>
+@foreach(var item in Model) {
+<tr><td>@item.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)</td><td>@item.ExpenseCategory.NameBn<br/>@item.Description</td><td>@item.Amount.ToString("N2")</td><td>@(item.Status == ApprovalStatus.Submitted ? "অনুমোদনের অপেক্ষায়" : item.Status == ApprovalStatus.Approved ? "অনুমোদিত" : "প্রত্যাখ্যাত")</td><td>
+@if(item.Status == ApprovalStatus.Submitted && (User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin"))) {
+<form asp-action="Review" method="post"><input type="hidden" name="id" value="@item.Id"/><input type="hidden" name="rowVersion" value="@Convert.ToBase64String(item.RowVersion)"/><input name="note" maxlength="1000" class="form-control mb-2" aria-label="পর্যালোচনার মন্তব্য" placeholder="মন্তব্য"/><button name="approve" value="true" class="btn btn-success btn-sm">অনুমোদন</button> <button name="approve" value="false" class="btn btn-danger btn-sm">প্রত্যাখ্যান</button></form>
+} else { @item.ReviewNote }
+</td></tr>
+}
+@if(Model.Count == 0) { <tr><td colspan="5">এখনো কোনো ব্যয় যোগ করা হয়নি।</td></tr> }
+</tbody></table></div></div>

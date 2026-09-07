@@ -1,0 +1,13 @@
+@model DoyamoyeeMondir.Web.Models.PersonForm
+@{ ViewData["Title"] = Model.Id == 0 ? "নতুন ব্যক্তি" : "ব্যক্তির তথ্য সম্পাদনা"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1>
+<form method="post" asp-action="Edit" class="card card-body mt-3" style="max-width:720px">
+<div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Id" type="hidden"/><input asp-for="RowVersion" type="hidden"/>
+<label asp-for="NameBn" class="form-label">নাম (বাংলা)</label><input asp-for="NameBn" class="form-control mb-3"/>
+<label asp-for="NameEn" class="form-label">নাম (ইংরেজি, ঐচ্ছিক)</label><input asp-for="NameEn" class="form-control mb-3"/>
+<label asp-for="MobileNumber" class="form-label">মোবাইল নম্বর</label><input asp-for="MobileNumber" type="tel" class="form-control mb-3"/>
+<label asp-for="Email" class="form-label">ইমেইল</label><input asp-for="Email" type="email" class="form-control mb-3"/>
+<label asp-for="AddressBn" class="form-label">ঠিকানা</label><textarea asp-for="AddressBn" class="form-control mb-3"></textarea>
+<label class="form-check mb-3"><input asp-for="IsActive" class="form-check-input"/><span class="form-check-label">সক্রিয়</span></label>
+<div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">তালিকায় ফিরুন</a></div>
+</form></div>

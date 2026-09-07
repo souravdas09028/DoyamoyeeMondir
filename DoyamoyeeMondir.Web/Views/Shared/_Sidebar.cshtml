@@ -1,4 +1,4 @@
-﻿@{
+@{
     var currentController =
         ViewContext.RouteData.Values["controller"]?.ToString();
 
@@ -80,19 +80,19 @@
                     </a>
 
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Memberships" asp-action="Index">
                             সদস্য তালিকা
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Memberships" asp-action="Create">
                             নতুন সদস্য
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="People" asp-action="Index">
                             দাতা তালিকা
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Memberships" asp-action="Index" asp-route-dueOnly="true">
                             বকেয়া চাঁদা
                         </a>
                     </div>
@@ -144,19 +144,19 @@
                     </a>
 
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Income" asp-action="Create">
                             নতুন আয়
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Income" asp-action="Index">
                             অনুদান
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Memberships" asp-action="Index">
                             চাঁদা সংগ্রহ
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Income" asp-action="Services">
                             ফি সংগ্রহ
                         </a>
                     </div>
@@ -178,12 +178,12 @@
                     </a>
 
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Expenses" asp-action="Create">
                             নতুন ব্যয়
                         </a>
 
-                        <a class="dropdown-item" href="#">
-                            বিল
+                        <a class="dropdown-item" asp-controller="Expenses" asp-action="Index">
+                            ব্যয়ের তালিকা
                         </a>
 
                         <a class="dropdown-item" href="#">
@@ -193,7 +193,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" asp-controller="Income" asp-action="Services">
                         <span class="nav-link-icon">
                             <i class="ti ti-flame"></i>
                         </span>
@@ -287,7 +287,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" asp-controller="Reports" asp-action="Index">
                         <span class="nav-link-icon">
                             <i class="ti ti-chart-bar"></i>
                         </span>
@@ -326,7 +326,7 @@
                             হিসাবের বছর
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Settings" asp-action="Index">
                             সিস্টেম সেটিংস
                         </a>
                     </div>

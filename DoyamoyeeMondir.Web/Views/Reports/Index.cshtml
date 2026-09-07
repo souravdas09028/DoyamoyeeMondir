@@ -1,0 +1,10 @@
+@model DoyamoyeeMondir.Web.Models.FinancialSummary
+@{ ViewData["Title"] = "আয় ও ব্যয়ের সারসংক্ষেপ"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1>
+<form method="get" class="d-flex flex-wrap gap-2 align-items-end my-3"><label>শুরু<input type="date" name="from" value="@Model.From.ToString("yyyy-MM-dd")" class="form-control"/></label><label>শেষ<input type="date" name="to" value="@Model.To.ToString("yyyy-MM-dd")" class="form-control"/></label><button class="btn btn-primary">রিপোর্ট দেখুন</button></form>
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<div class="row g-3"><div class="col-md-4"><div class="card card-body"><h2 class="h4">মোট সংগ্রহ</h2><strong>@Model.Income.ToString("N2") টাকা</strong></div></div><div class="col-md-4"><div class="card card-body"><h2 class="h4">অনুমোদিত ব্যয়</h2><strong>@Model.ApprovedExpenses.ToString("N2") টাকা</strong></div></div><div class="col-md-4"><div class="card card-body"><h2 class="h4">অপেক্ষমাণ ব্যয়</h2><strong>@Model.PendingExpenses.ToString("N2") টাকা</strong></div></div></div>
+<p class="my-3">সেবার সংগৃহীত অর্থের মধ্যে পুরোহিতের অংশ: @Model.PriestShare.ToString("N2"), কর্মচারীর অংশ: @Model.StaffShare.ToString("N2") টাকা। এগুলো মোট সংগ্রহের অন্তর্ভুক্ত।</p>
+<p>এটি সংগ্রহ ও অনুমোদিত ব্যয়ের প্রতিবেদন। ব্যয় পরিশোধ ও ব্যাংক সমন্বয় ছাড়া এটি নগদ বা ব্যাংকের বর্তমান স্থিতি নয়।</p>
+<div class="row g-3"><div class="col-md-6"><div class="card card-body"><h2 class="h3">আয়ের খাত</h2><table class="table"><thead><tr><th>খাত</th><th>টাকা</th></tr></thead><tbody>@foreach(var r in Model.IncomeHeads) { <tr><td>@r.Name</td><td>@r.Amount.ToString("N2")</td></tr> }@if(Model.IncomeHeads.Count == 0) { <tr><td colspan="2">কোনো আয় নেই।</td></tr> }</tbody></table></div></div><div class="col-md-6"><div class="card card-body"><h2 class="h3">ব্যয়ের খাত (অনুমোদিত)</h2><table class="table"><thead><tr><th>খাত</th><th>টাকা</th></tr></thead><tbody>@foreach(var r in Model.ExpenseHeads) { <tr><td>@r.Name</td><td>@r.Amount.ToString("N2")</td></tr> }@if(Model.ExpenseHeads.Count == 0) { <tr><td colspan="2">কোনো অনুমোদিত ব্যয় নেই।</td></tr> }</tbody></table></div></div></div>
+</div>
