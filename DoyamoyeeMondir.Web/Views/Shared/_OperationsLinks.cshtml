@@ -4,4 +4,5 @@
 @if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-controller="Assets" asp-action="Index" class="btn btn-outline-primary">সম্পদ ও অলংকার</a><a asp-controller="Committees" asp-action="Index" class="btn btn-outline-primary">কমিটি</a> }
 @if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("DocumentManager")) { <a asp-controller="Documents" asp-action="Index" class="btn btn-outline-primary">দলিল ও নথি</a> }
 @if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("Accountant") || User.IsInRole("Treasurer")) { <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-primary">কর্মী ও বেতন</a> }
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("Accountant") || User.IsInRole("Treasurer") || User.IsInRole("DonationCollector")) { <a asp-controller="Prasad" asp-action="Index" class="btn btn-outline-primary">প্রসাদ বিক্রয়</a> }
 </nav>

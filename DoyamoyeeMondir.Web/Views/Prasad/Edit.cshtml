@@ -1,0 +1,10 @@
+@model DoyamoyeeMondir.Web.Models.PrasadProductForm
+@{ ViewData["Title"]="প্রসাদ পণ্যের তথ্য"; }
+<div class="container-xl py-4"><h1>প্রসাদ পণ্যের তথ্য</h1><form asp-action="Edit" method="post" class="card card-body" style="max-width:640px">
+<div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Id" type="hidden"/><input asp-for="RowVersion" type="hidden"/>
+<label asp-for="NameBn">প্রসাদের নাম</label><input asp-for="NameBn" class="form-control mb-3"/>
+<label asp-for="InventoryItemId">সংযুক্ত মজুত পণ্য</label><select asp-for="InventoryItemId" asp-items="ViewBag.Items" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
+<p class="text-muted">একটি বিক্রয় একক = সংযুক্ত মজুত পণ্যের এক একক। প্যাকেট বিক্রয়ের জন্য প্যাকেট এককে মজুত রাখুন।</p>
+<label asp-for="Price">প্রতি এককের দাম (টাকা)</label><input asp-for="Price" type="number" min="0.01" step="0.01" class="form-control mb-3"/>
+<label class="form-check mb-3"><input asp-for="IsActive" class="form-check-input"/><span class="form-check-label">সক্রিয়</span></label>
+<div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">ফিরুন</a></div></form></div>

@@ -69,7 +69,7 @@ Run live HTTP checks with `TEMPLE_TEST_PASSWORD` set, using `python tests/http_s
 
 ## Remaining increments
 - Bank reconciliation and financial correction/reversal workflows.
-- Prasad sales beyond generic income entry.
+- Prasad returns/refunds remain part of the financial reversal workflow; ordinary prasad sales are complete below.
 - Membership billing recurrence once the client defines its schedule and renewal rules.
 - Bengali Identity screens, user/role administration, visual/print acceptance, operational deployment and backup validation.
 
@@ -88,3 +88,13 @@ The existing startup seeder contains a fixed administrator password; replace it 
 - Payroll migration applied to the separate preview database. Preview process stopped after testing to avoid locking build DLLs.
 - Run `python tests/http_payroll_smoke.py` with `TEMPLE_TEST_PASSWORD` set while preview is running. This leaves named test records in preview.
 - Rejected/cancelled payroll correction is still part of the pending financial correction workflow; do not create a second general expense to bypass the monthly payroll restriction.
+
+## Prasad sales increment
+- `/Prasad`: Bengali product register with configurable unit price and a linked inventory item. Administrators manage products; financial users and donation collectors record sales.
+- `/Prasad/Sell/{id}` saves one income receipt, one sale and one stock issue atomically. Existing account balances and income reports include the sale automatically, without a second income entry.
+- Sales use whole inventory units (for example packets). Record finished, saleable prasad in inventory first; ingredient recipes and production conversion are not implemented.
+- Historical product name, unit and price are preserved. A sold product cannot be reassigned to another inventory item. Stale prices, insufficient stock, invalid account dates and stock backdating are rejected.
+- `/Prasad/Sales` provides paginated history and printable income receipt links. Duplicate submission returns the original receipt and does not reduce stock twice.
+- `PrasadSalesWorkflow` migration adds precision, constraints and row-version concurrency; tested on a temporary SQL database and applied only to local preview. Production deployment has not been performed.
+- Build passed with the four existing migration naming warnings. All 36 domain checks and 35 SQL assertions passed, including nine new prasad checks. Five live HTTP form checks passed; no separate visual acceptance was performed for this increment.
+- Run `python tests/http_prasad_smoke.py` with `TEMPLE_TEST_PASSWORD` set against local preview. Named test records are retained there. Preview was stopped after testing to release build DLLs.

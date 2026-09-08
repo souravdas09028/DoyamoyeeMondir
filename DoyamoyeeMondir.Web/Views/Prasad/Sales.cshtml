@@ -1,0 +1,7 @@
+@model List<DoyamoyeeMondir.Domain.Entities.PrasadSale>
+@{ ViewData["Title"]="প্রসাদ বিক্রয়ের খাতা"; }
+<div class="container-xl py-4"><h1>প্রসাদ বিক্রয়ের খাতা</h1><a asp-action="Index" class="btn btn-primary my-3">নতুন বিক্রয়</a>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>তারিখ</th><th>প্রসাদ</th><th>পরিমাণ</th><th>এককের দাম</th><th>মোট</th><th>রসিদ</th></tr></thead><tbody>
+@foreach(var s in Model) { <tr><td>@s.Income.Date.ToString("yyyy-MM-dd")</td><td>@s.ProductName</td><td>@s.Quantity @s.Unit</td><td>@s.UnitPrice.ToString("N2")</td><td>@s.Income.Amount.ToString("N2")</td><td><a asp-controller="Income" asp-action="Receipt" asp-route-id="@s.IncomeId">রসিদ #@s.IncomeId</a></td></tr> }
+@if(Model.Count==0) { <tr><td colspan="6">কোনো বিক্রয় নেই।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

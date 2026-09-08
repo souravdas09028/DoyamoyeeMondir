@@ -1,0 +1,14 @@
+@model DoyamoyeeMondir.Web.Models.PrasadSaleForm
+@{ ViewData["Title"]="প্রসাদ বিক্রয়"; DoyamoyeeMondir.Domain.Entities.PrasadProduct p=ViewBag.Product; }
+<div class="container-xl py-4"><h1>@p.NameBn</h1><p>প্রতি @p.InventoryItem.Unit: @p.Price.ToString("N2") টাকা · মজুত: @p.InventoryItem.Quantity.ToString("0.###") @p.InventoryItem.Unit</p>
+<form asp-action="Sell" method="post" class="card card-body" style="max-width:640px"><div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<input asp-for="ProductId" type="hidden"/><input asp-for="ProductVersion" type="hidden"/><input asp-for="SubmissionKey" type="hidden"/>
+<label asp-for="Date">বিক্রয়ের তারিখ</label><input asp-for="Date" type="date" class="form-control mb-3"/>
+<label asp-for="Quantity">পরিমাণ (@p.InventoryItem.Unit)</label><input asp-for="Quantity" type="number" min="1" step="1" class="form-control mb-3"/>
+<p>মোট মূল্য = পরিমাণ × @p.Price.ToString("N2") টাকা।</p>
+<label asp-for="PayerName">ক্রেতার নাম (ঐচ্ছিক)</label><input asp-for="PayerName" class="form-control mb-3"/>
+<label asp-for="IncomeCategoryId">আয়ের ধরন</label><select asp-for="IncomeCategoryId" asp-items="ViewBag.Categories" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
+<label asp-for="CashBankAccountId">টাকা জমার হিসাব</label><select asp-for="CashBankAccountId" asp-items="ViewBag.Accounts" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
+<label asp-for="PaymentMethod">পরিশোধের মাধ্যম</label><select asp-for="PaymentMethod" class="form-select mb-3"><option value="1">নগদ</option><option value="2">ব্যাংক স্থানান্তর</option><option value="3">চেক</option><option value="4">মোবাইল ব্যাংকিং</option><option value="5">কার্ড</option><option value="6">অনলাইন</option><option value="7">অন্যান্য</option></select>
+<label asp-for="Reference">লেনদেন নম্বর (ঐচ্ছিক)</label><input asp-for="Reference" class="form-control mb-3"/>
+<div><button class="btn btn-primary">বিক্রয় ও রসিদ তৈরি করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">ফিরুন</a></div></form></div>

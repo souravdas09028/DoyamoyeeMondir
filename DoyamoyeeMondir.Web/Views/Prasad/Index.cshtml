@@ -1,0 +1,10 @@
+@model List<DoyamoyeeMondir.Domain.Entities.PrasadProduct>
+@{ ViewData["Title"]="প্রসাদ বিক্রয়"; }
+<div class="container-xl py-4"><h1>প্রসাদ বিক্রয়</h1><p>বিক্রয়যোগ্য প্রসাদের মজুত আগে মজুত খাতায় যোগ করুন। প্রতিটি বিক্রয়ে আয় ও মজুত একসঙ্গে নথিভুক্ত হবে।</p>
+<div class="d-flex gap-2 my-3">@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-action="Edit" class="btn btn-primary">পণ্য যুক্ত করুন</a> }<a asp-action="Sales" class="btn btn-outline-primary">বিক্রয়ের খাতা</a></div>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>প্রসাদ</th><th>একক</th><th>দাম</th><th>মজুত</th><th>কার্যক্রম</th></tr></thead><tbody>
+@foreach(var p in Model) { <tr><td>@p.NameBn @if(!p.IsActive || !p.InventoryItem.IsActive) { <span class="badge bg-secondary">নিষ্ক্রিয়</span> }</td><td>@p.InventoryItem.Unit</td><td>@p.Price.ToString("N2")</td><td>@p.InventoryItem.Quantity.ToString("0.###")</td><td>
+@if(p.IsActive && p.InventoryItem.IsActive) { <a asp-action="Sell" asp-route-id="@p.Id" class="btn btn-sm btn-primary">বিক্রয়</a> }
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-action="Edit" asp-route-id="@p.Id" class="ms-2">সম্পাদনা</a> }</td></tr> }
+@if(Model.Count==0) { <tr><td colspan="5">কোনো প্রসাদ পণ্য যুক্ত হয়নি।</td></tr> }
+</tbody></table></div><partial name="_OperationsLinks"/></div>
