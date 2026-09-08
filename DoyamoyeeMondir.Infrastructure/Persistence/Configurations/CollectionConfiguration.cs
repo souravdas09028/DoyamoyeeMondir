@@ -13,6 +13,8 @@ public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
         b.Property(x => x.CollectedAmount).HasPrecision(18, 2);
         b.Property(x => x.RowVersion).IsRowVersion();
         b.HasIndex(x => x.SubmissionKey).IsUnique();
+        b.HasIndex(x => x.PreviousMembershipId).IsUnique().HasFilter("[PreviousMembershipId] IS NOT NULL");
+        b.HasOne<Membership>().WithMany().HasForeignKey(x => x.PreviousMembershipId).OnDelete(DeleteBehavior.Restrict);
         b.HasIndex(x => new { x.PersonId, x.MembershipTypeId, x.StartDate }).IsUnique();
         b.HasOne(x => x.Person).WithMany().HasForeignKey(x => x.PersonId).OnDelete(DeleteBehavior.Restrict);
         b.HasOne(x => x.MembershipType).WithMany().HasForeignKey(x => x.MembershipTypeId).OnDelete(DeleteBehavior.Restrict);

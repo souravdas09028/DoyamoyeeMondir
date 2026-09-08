@@ -1,0 +1,12 @@
+@model List<DoyamoyeeMondir.Domain.Entities.Employee>
+@{ ViewData["Title"]="কর্মী ও বেতন"; }
+<div class="container-xl py-4"><h1>কর্মী ও বেতন</h1><div class="d-flex gap-2 my-3">
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-action="Edit" class="btn btn-primary">কর্মী যুক্ত করুন</a> }
+<a asp-action="Payroll" class="btn btn-outline-primary">বেতনের খাতা</a></div>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>নাম</th><th>পদবি</th><th>মোবাইল</th><th>মাসিক বেতন</th><th>যোগদান</th><th>অবস্থা</th><th>কার্যক্রম</th></tr></thead><tbody>
+@foreach(var e in Model) { <tr><td>@e.NameBn</td><td>@e.Position</td><td>@e.Mobile</td><td>@e.MonthlySalary.ToString("N2")</td><td>@e.JoinedOn.ToString("yyyy-MM-dd")</td><td>@(e.IsActive ? "সক্রিয়" : "নিষ্ক্রিয়")</td><td>
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-action="Edit" asp-route-id="@e.Id">সম্পাদনা</a> }
+@if(e.IsActive) { <a asp-action="Generate" asp-route-id="@e.Id" class="ms-2">বেতন নথিভুক্ত করুন</a> }
+</td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="7">কোনো কর্মী যুক্ত করা হয়নি।</td></tr> }
+</tbody></table></div><partial name="_OperationsLinks"/></div>

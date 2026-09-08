@@ -25,4 +25,6 @@ public class CashBankAccount : BaseAuditableEntity
     public DateOnly? OpeningBalanceDate { get; set; }
 
     public bool IsActive { get; set; } = true;
+    public DateOnly? ClosedThrough { get; set; }
+    public bool CanPost(DateOnly date) => (!OpeningBalanceDate.HasValue || date >= OpeningBalanceDate) && (!ClosedThrough.HasValue || date > ClosedThrough);
 }

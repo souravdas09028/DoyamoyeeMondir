@@ -24,6 +24,7 @@ public class Membership : BaseAuditableEntity
         MembershipTypeId = type.Id;
         TypeName = type.NameBn;
         AgreedAmount = type.Amount;
+        RenewalMonths = type.RenewalMonths;
     }
 
     public void Collect(decimal amount)
@@ -32,4 +33,11 @@ public class Membership : BaseAuditableEntity
             throw new InvalidOperationException("Collection exceeds outstanding amount or is invalid.");
         CollectedAmount += amount;
     }
+    public void Refund(decimal amount)
+    {
+        if (amount <= 0 || amount > CollectedAmount) throw new InvalidOperationException("Invalid refund.");
+        CollectedAmount -= amount;
+    }
+    public int RenewalMonths { get; private set; }
+    public int? PreviousMembershipId { get; set; }
 }

@@ -69,9 +69,22 @@ Run live HTTP checks with `TEMPLE_TEST_PASSWORD` set, using `python tests/http_s
 
 ## Remaining increments
 - Bank reconciliation and financial correction/reversal workflows.
-- Prasad sales beyond generic income entry; employee/salary workflows.
+- Prasad sales beyond generic income entry.
 - Membership billing recurrence once the client defines its schedule and renewal rules.
 - Bengali Identity screens, user/role administration, visual/print acceptance, operational deployment and backup validation.
 
 Expense approval authorizes the expense; the new payment workflow separately records settlement and affects account balances.
 The existing startup seeder contains a fixed administrator password; replace it with securely configured bootstrap credentials before deployment.
+
+## Employee and payroll increment
+- `/Employees`: Bengali employee register; administrators can create/edit name, position, contact, joining date, active status and monthly salary.
+- `/Employees/Generate/{id}`: one payroll per employee/calendar month, with salary snapshot, allowance and deduction. Partial-month adjustments are entered explicitly as deductions/allowances.
+- Payroll creates one linked expense atomically. The selected expense category determines approval; the existing expense/payment workflow handles settlement. Recording payroll does not itself move cash.
+- `/Employees/Payroll`: monthly salary history, approved/pending/paid status, paid amount and payment links. Later salary edits preserve historical figures.
+- Unique employee/month and expense indexes prevent duplicate payroll. Employee row-version checks reject stale salary forms and competing updates. Joining date is fixed after payroll exists.
+- Migration `PayrollWorkflow` preserves the earlier `cashmodule` migration and replaces its ordinary binary concurrency columns with SQL Server rowversion columns for employees/payroll.
+- Validation: build passed (four existing lowercase migration-class warnings); 36 domain checks and 26 SQL integration assertions passed, including nine payroll assertions. Five live payroll form checks passed against `DoyamoyeeMondirPreview`.
+- The general HTTP suite passed once during this increment; a repeat exposed its existing first-person selection assumption when preview records accumulate. The payroll HTTP test runs independently and passed. Visual/mobile acceptance remains outstanding.
+- Payroll migration applied to the separate preview database. Preview process stopped after testing to avoid locking build DLLs.
+- Run `python tests/http_payroll_smoke.py` with `TEMPLE_TEST_PASSWORD` set while preview is running. This leaves named test records in preview.
+- Rejected/cancelled payroll correction is still part of the pending financial correction workflow; do not create a second general expense to bypass the monthly payroll restriction.

@@ -66,6 +66,7 @@ internal static class SqlChecks
                 Assert(result is ViewResult && !controller.ModelState.IsValid, "Collection cannot precede account opening date");
             }
             await OperationSqlChecks.Run(options);
+            await PayrollSqlChecks.Run(options);
             Console.WriteLine("PASS: SQL migration and integration checks");
 
             Income NewIncome(decimal amount) => new() { Amount = amount, MembershipId = membership.Id, PersonId = person.Id, IncomeCategoryId = category.Id, CashBankAccountId = account.Id,

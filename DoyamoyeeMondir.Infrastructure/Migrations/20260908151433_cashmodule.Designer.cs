@@ -4,6 +4,7 @@ using DoyamoyeeMondir.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoyamoyeeMondir.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260908151433_cashmodule")]
+    partial class cashmodule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -384,28 +387,22 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Mobile")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("MonthlySalary")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("NameBn")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
                         .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -415,10 +412,7 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Employee_Salary", "[MonthlySalary] >= 0");
-                        });
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.Expense", b =>
@@ -1156,11 +1150,9 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Allowance")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("BaseSalary")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -1170,7 +1162,6 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Deduction")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -1184,8 +1175,7 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
 
                     b.Property<string>("EmployeeName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ExpenseId")
                         .HasColumnType("int");
@@ -1197,10 +1187,8 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .HasColumnType("date");
 
                     b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
                         .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -1210,16 +1198,11 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExpenseId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EmployeeId", "Month")
-                        .IsUnique();
+                    b.HasIndex("ExpenseId");
 
-                    b.ToTable("PayrollEntries", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Payroll_Amount", "DAY([Month]) = 1 AND [BaseSalary] >= 0 AND [Allowance] >= 0 AND [Deduction] >= 0 AND [BaseSalary] + [Allowance] > [Deduction]");
-                        });
+                    b.ToTable("PayrollEntries");
                 });
 
             modelBuilder.Entity("DoyamoyeeMondir.Domain.Entities.Person", b =>
@@ -2146,13 +2129,13 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                     b.HasOne("DoyamoyeeMondir.Domain.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DoyamoyeeMondir.Domain.Entities.Expense", "Expense")
                         .WithMany()
                         .HasForeignKey("ExpenseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee");

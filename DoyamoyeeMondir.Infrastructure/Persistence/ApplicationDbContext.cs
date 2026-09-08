@@ -19,6 +19,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Person> Persons => Set<Person>();
+    public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<PayrollEntry> PayrollEntries => Set<PayrollEntry>();
+    public DbSet<PrasadProduct> PrasadProducts => Set<PrasadProduct>();
+    public DbSet<PrasadSale> PrasadSales => Set<PrasadSale>();
+    public DbSet<FinancialReversal> FinancialReversals => Set<FinancialReversal>();
+    public DbSet<BankReconciliation> BankReconciliations => Set<BankReconciliation>();
+    public DbSet<UserAudit> UserAudits => Set<UserAudit>();
     public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();
     public DbSet<AccountTransfer> AccountTransfers => Set<AccountTransfer>();
     public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();

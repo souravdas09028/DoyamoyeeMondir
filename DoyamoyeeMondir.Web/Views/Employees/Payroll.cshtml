@@ -1,0 +1,11 @@
+@model List<DoyamoyeeMondir.Domain.Entities.PayrollEntry>
+@using DoyamoyeeMondir.Domain.Enums
+@{ ViewData["Title"]="বেতনের খাতা"; }
+<div class="container-xl py-4"><h1>বেতনের খাতা</h1><a asp-action="Index" class="btn btn-outline-primary my-3">কর্মী তালিকা</a> <a asp-controller="Expenses" asp-action="Index" class="btn btn-outline-primary">ব্যয় ও অনুমোদন</a>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>মাস</th><th>কর্মী</th><th>মূল বেতন</th><th>ভাতা</th><th>কর্তন</th><th>প্রদেয়</th><th>পরিশোধিত</th><th>অবস্থা</th><th>কার্যক্রম</th></tr></thead><tbody>
+@foreach(var p in Model) { <tr><td>@p.Month.ToString("yyyy-MM")</td><td>@p.EmployeeName</td><td>@p.BaseSalary.ToString("N2")</td><td>@p.Allowance.ToString("N2")</td><td>@p.Deduction.ToString("N2")</td><td>@p.Expense.Amount.ToString("N2")</td><td>@p.Expense.PaidAmount.ToString("N2")</td><td>@(p.Expense.Status switch { ApprovalStatus.Submitted=>"অনুমোদনের অপেক্ষায়", ApprovalStatus.Approved=>"অনুমোদিত", ApprovalStatus.Paid=>"পরিশোধিত", ApprovalStatus.Rejected=>"প্রত্যাখ্যাত", _=>"বাতিল" })</td><td>@if(p.Expense.Status == ApprovalStatus.Approved) { <a asp-controller="Accounts" asp-action="Pay" asp-route-id="@p.ExpenseId">পরিশোধ করুন</a> }</td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="9">কোনো বেতন নথিভুক্ত হয়নি।</td></tr> }
+</tbody></table></div>
+@if((int)ViewBag.Page > 1) { <a asp-route-page="@((int)ViewBag.Page-1)" class="btn btn-outline-secondary">আগের পাতা</a> }
+@if((int)ViewBag.Total > (int)ViewBag.Page*50) { <a asp-route-page="@((int)ViewBag.Page+1)" class="btn btn-outline-secondary">পরের পাতা</a> }
+</div>

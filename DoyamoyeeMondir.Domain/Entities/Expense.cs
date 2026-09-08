@@ -32,6 +32,16 @@ public class Expense : BaseAuditableEntity
         RequiresApproval = requiresApproval;
         Status = requiresApproval ? ApprovalStatus.Submitted : ApprovalStatus.Approved;
     }
+    public void ReversePayment(decimal amount)
+    {
+        if (amount <= 0 || amount > PaidAmount || Status is not (ApprovalStatus.Approved or ApprovalStatus.Paid)) throw new InvalidOperationException("Invalid reversal.");
+        PaidAmount -= amount; Status = ApprovalStatus.Approved;
+    }
+    public void CancelApproved()
+    {
+        if (Status != ApprovalStatus.Approved || PaidAmount != 0) throw new InvalidOperationException("Reverse payments before cancelling an expense.");
+        Status = ApprovalStatus.Cancelled;
+    }
 
     public void Review(bool approve, string userId, string? note)
     {
