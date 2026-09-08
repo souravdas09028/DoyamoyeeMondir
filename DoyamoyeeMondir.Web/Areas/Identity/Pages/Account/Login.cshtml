@@ -1,0 +1,45 @@
+@page
+@model DoyamoyeeMondir.Web.Areas.Identity.Pages.Account.LoginModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = null; }
+<!doctype html>
+<html lang="bn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="দয়াময়ী মন্দির ব্যবস্থাপনা — অনুমোদিত ব্যবহারকারীদের প্রবেশ" />
+    <title>প্রবেশ করুন · দয়াময়ী মন্দির</title>
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+</head>
+<body>
+<main class="login-shell">
+    <section class="welcome" aria-labelledby="temple-name">
+        <a class="brand" href="~/" aria-label="দয়াময়ী মন্দিরের মূল পাতা"><span class="brand-mark" aria-hidden="true">শ্রী</span><span>দয়াময়ী মন্দির<small>মন্দির ব্যবস্থাপনা</small></span></a>
+        <div class="welcome-copy"><span class="eyebrow">সেবা • শ্রদ্ধা • সমন্বয়</span><h1 id="temple-name">সেবার প্রতিটি কাজে,<br />সুশৃঙ্খল ব্যবস্থাপনা।</h1><p>ভক্তদের তথ্য, মন্দিরের সেবা ও দৈনন্দিন<br class="desktop-break" /> হিসাব—সব এক জায়গায়।</p></div>
+        <svg class="temple-art" viewBox="0 0 560 260" fill="none" aria-hidden="true">
+            <circle cx="280" cy="132" r="116" fill="currentColor" opacity=".035"/><circle cx="280" cy="132" r="90" stroke="currentColor" opacity=".16"/>
+            <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M60 238h440M85 226h390M110 213h340M150 213v-80h65m130 0h65v80M138 133l45-39 32 27m130 0 32-27 45 39M215 213V111h130v102M204 111h152L330 90H230l-26 21ZM230 90l16-30h68l16 30M246 60l34-42 34 42M280 18V5m0 0 23 8-23 7M261 213v-48a19 19 0 0 1 38 0v48M168 213v-45h28v45m168 0v-45h28v45"/>
+                <path d="M241 125h78M249 136h62M99 213v-20m-9 0h18m354 20v-20m-9 0h18M126 213v-9m308 9v-9" opacity=".55"/>
+            </g>
+        </svg>
+        <p class="welcome-foot">দয়াময়ী মন্দির · সেবায় নিবেদিত</p>
+    </section>
+    <section class="login-panel" aria-labelledby="login-title">
+        <div class="form-wrap"><span class="section-label">স্বাগতম</span><h2 id="login-title">আপনার অ্যাকাউন্টে প্রবেশ করুন</h2><p class="intro">মন্দিরের কার্যক্রম পরিচালনা করতে আপনার<br class="desktop-break" /> ইমেইল ও পাসওয়ার্ড ব্যবহার করুন।</p>
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+                <div class="field"><label asp-for="Input.Email">ইমেইল ঠিকানা</label><input asp-for="Input.Email" type="email" autocomplete="username" inputmode="email" placeholder="name@example.com" spellcheck="false" aria-describedby="email-error" required /><span asp-validation-for="Input.Email" id="email-error" class="field-error"></span></div>
+                <div class="field"><label asp-for="Input.Password">পাসওয়ার্ড</label><div class="password-wrap"><input asp-for="Input.Password" autocomplete="current-password" placeholder="আপনার পাসওয়ার্ড লিখুন" aria-describedby="password-error" required /><button type="button" id="toggle-password" class="password-toggle" aria-controls="Input_Password" aria-pressed="false" hidden>দেখুন</button></div><span asp-validation-for="Input.Password" id="password-error" class="field-error"></span></div>
+                <label class="remember"><input asp-for="Input.RememberMe" /><span>এই ডিভাইসে মনে রাখুন</span></label>
+                <button type="submit" class="submit-button">প্রবেশ করুন <span aria-hidden="true">→</span></button>
+            </form>
+            <div class="help"><strong>প্রবেশ করতে সমস্যা হচ্ছে?</strong><p>অ্যাকাউন্ট বা পাসওয়ার্ডের সহায়তার জন্য মন্দিরের প্রশাসকের সঙ্গে যোগাযোগ করুন।</p></div>
+            <p class="access-note"><span aria-hidden="true">◇</span> শুধুমাত্র অনুমোদিত ব্যবহারকারীদের জন্য</p>
+        </div>
+        <footer>© @DateTime.UtcNow.Year দয়াময়ী মন্দির</footer>
+    </section>
+</main>
+<script src="~/js/login.js" asp-append-version="true"></script>
+</body>
+</html>
