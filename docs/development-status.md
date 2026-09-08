@@ -71,10 +71,10 @@ Run live HTTP checks with `TEMPLE_TEST_PASSWORD` set, using `python tests/http_s
 - Bank reconciliation and financial correction/reversal workflows.
 - Prasad returns/refunds remain part of the financial reversal workflow; ordinary prasad sales are complete below.
 - Membership billing recurrence once the client defines its schedule and renewal rules.
-- Bengali Identity screens, user/role administration, visual/print acceptance, operational deployment and backup validation.
+- Remaining Bengali Identity screens (beyond login), visual/print acceptance, operational deployment and backup validation. User/role administration is complete below.
 
 Expense approval authorizes the expense; the new payment workflow separately records settlement and affects account balances.
-The existing startup seeder contains a fixed administrator password; replace it with securely configured bootstrap credentials before deployment.
+The startup seeder now requires configured bootstrap credentials only for an empty user database. Existing account passwords are unchanged; rotate any original default password through the account password-change screen.
 
 ## Employee and payroll increment
 - `/Employees`: Bengali employee register; administrators can create/edit name, position, contact, joining date, active status and monthly salary.
@@ -98,3 +98,15 @@ The existing startup seeder contains a fixed administrator password; replace it 
 - `PrasadSalesWorkflow` migration adds precision, constraints and row-version concurrency; tested on a temporary SQL database and applied only to local preview. Production deployment has not been performed.
 - Build passed with the four existing migration naming warnings. All 36 domain checks and 35 SQL assertions passed, including nine new prasad checks. Five live HTTP form checks passed; no separate visual acceptance was performed for this increment.
 - Run `python tests/http_prasad_smoke.py` with `TEMPLE_TEST_PASSWORD` set against local preview. Named test records are retained there. Preview was stopped after testing to release build DLLs.
+
+## User and role administration
+- `/Users`: SuperAdmin-only Bengali account management, search and paging. Create accounts, edit names, assign one or more supported roles and activate/deactivate users. Login email is fixed after creation.
+- `/Users/Roles` documents actual current permissions. Roles map to existing controller authorization; arbitrary custom roles/permission editing are not implemented. President, GeneralSecretary and Viewer currently have only the general home/account pages unless an additional role is assigned.
+- `/Users/ResetPassword/{id}` resets another user's password and clears temporary login lockout. The administrator communicates the new password privately. Automatic email delivery and forced password change are not implemented; users can change passwords through their existing account menu.
+- Role changes, account changes and password resets invalidate existing sessions. Inactive accounts cannot log in. Cookie security stamps are checked on every request so old permissions do not persist.
+- Administrative mutations use an atomic database transaction and a transaction-owned SQL application lock. Actor authorization is checked again inside the lock. Concurrency stamps reject stale forms; administrators cannot deactivate themselves or remove their own SuperAdmin role, and an active SuperAdmin must remain.
+- `/Users/Audit` records target account, actor, UTC time and role/status changes or password-reset action. Passwords are never included. Audit entries have no edit/delete interface.
+- Public registration is disabled. Existing users/roles are no longer restored or re-promoted on startup. For a brand-new empty user database only, configure `BootstrapAdmin__Email` and `BootstrapAdmin__Password` in the server environment. Remove the bootstrap password setting after successful initial setup. Existing deployments require no bootstrap settings and retain their accounts.
+- No new migration is needed; the existing UserAudits table is used. Production was not modified.
+- Validation: final incremental build passed with zero warnings/errors. Eighteen live HTTP checks passed, including role enforcement, session revocation, stale updates, duplicate email, password reset, audit secrecy, self-demotion protection and antiforgery. Desktop screenshots checked the list and creation form. Test account deactivated and preview stopped after testing.
+- Run `python tests/http_users_smoke.py` with `TEMPLE_TEST_PASSWORD` set against the isolated local preview. It retains an inactive test user and its audit history.

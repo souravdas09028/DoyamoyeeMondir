@@ -1,0 +1,11 @@
+@model List<DoyamoyeeMondir.Web.Models.UserListRow>
+@using DoyamoyeeMondir.Web.Models
+@{ ViewData["Title"]="ব্যবহারকারী ব্যবস্থাপনা"; }
+<div class="container-xl py-4"><h1>ব্যবহারকারী ব্যবস্থাপনা</h1>
+@if(TempData["Success"] is string message) { <div class="alert alert-success" role="status">@message</div> }
+<div class="d-flex flex-wrap gap-2 my-3"><a asp-action="Edit" class="btn btn-primary">ব্যবহারকারী যুক্ত করুন</a><a asp-action="Roles" class="btn btn-outline-primary">ভূমিকা ও অনুমতি</a><a asp-action="Audit" class="btn btn-outline-primary">পরিবর্তনের ইতিহাস</a></div>
+<form method="get" class="d-flex gap-2 mb-3"><input name="search" value="@ViewBag.Search" aria-label="নাম বা ইমেইল" placeholder="নাম বা ইমেইল দিয়ে খুঁজুন" class="form-control" style="max-width:400px"/><button class="btn btn-outline-primary">খুঁজুন</button></form>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>নাম</th><th>ইমেইল</th><th>ভূমিকা</th><th>অবস্থা</th><th>কার্যক্রম</th></tr></thead><tbody>
+@foreach(var u in Model) { <tr><td>@u.Name</td><td>@u.Email</td><td>@string.Join("، ",u.Roles.Select(r=>TempleRoles.Labels.GetValueOrDefault(r,r)))</td><td>@(u.Active?"সক্রিয়":"নিষ্ক্রিয়") @(u.Locked?" · সাময়িকভাবে লক করা":"")</td><td><a asp-action="Edit" asp-route-id="@u.Id">সম্পাদনা</a> <a asp-action="ResetPassword" asp-route-id="@u.Id" class="ms-2">পাসওয়ার্ড পুনর্নির্ধারণ</a></td></tr> }
+@if(Model.Count==0) { <tr><td colspan="5">কোনো ব্যবহারকারী পাওয়া যায়নি।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

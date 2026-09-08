@@ -1,0 +1,13 @@
+@model DoyamoyeeMondir.Web.Models.UserForm
+@using DoyamoyeeMondir.Web.Models
+@{ ViewData["Title"]=string.IsNullOrEmpty(Model.Id)?"ব্যবহারকারী যুক্ত করুন":"ব্যবহারকারীর তথ্য"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><form asp-action="Edit" method="post" class="card card-body" style="max-width:720px"><div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<input asp-for="Id" type="hidden"/><input asp-for="Stamp" type="hidden"/>
+<label asp-for="NameBn">নাম</label><input asp-for="NameBn" class="form-control mb-3"/>
+<label asp-for="Email">লগইন ইমেইল</label><input asp-for="Email" type="email" readonly="@(!string.IsNullOrEmpty(Model.Id))" autocomplete="off" class="form-control mb-3"/>
+@if(string.IsNullOrEmpty(Model.Id)) { <label asp-for="Password">প্রাথমিক পাসওয়ার্ড</label><input asp-for="Password" autocomplete="new-password" class="form-control mb-2"/><p class="text-muted">অন্তত ৮ অক্ষর, ইংরেজি বড় ও ছোট অক্ষর এবং সংখ্যা ব্যবহার করুন। পাসওয়ার্ডটি ব্যবহারকারীকে ব্যক্তিগতভাবে দিন।</p> }
+<label class="form-check mb-3"><input asp-for="IsActive" class="form-check-input"/><span class="form-check-label">সক্রিয় — ব্যবহারকারী প্রবেশ করতে পারবেন</span></label>
+<fieldset><legend class="fs-4">ভূমিকা</legend><p>একাধিক ভূমিকার অনুমতি একসঙ্গে প্রযোজ্য হবে। <a asp-action="Roles" target="_blank" rel="noopener">অনুমতির তালিকা দেখুন</a></p>
+@foreach(var role in TempleRoles.Labels) { <label class="form-check mb-2"><input type="checkbox" name="Roles" value="@role.Key" checked="@Model.Roles.Contains(role.Key)" class="form-check-input"/><span class="form-check-label">@role.Value</span></label> }
+</fieldset><p class="text-muted mt-3">ভূমিকা বা তথ্য পরিবর্তনের পরে ব্যবহারকারীকে আবার লগইন করতে হবে। নিজের প্রধান প্রশাসকের প্রবেশাধিকার সরানো যাবে না।</p>
+<div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">ফিরুন</a></div></form></div>

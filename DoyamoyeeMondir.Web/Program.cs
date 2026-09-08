@@ -28,6 +28,21 @@ builder.Services.AddScoped<
 builder.Services.AddApplication();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddScoped<UserAdministration>();
+builder.Services.Configure<Microsoft.AspNetCore.Identity.SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.Zero);
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnValidatePrincipal = async context =>
+    {
+        await Microsoft.AspNetCore.Identity.SecurityStampValidator.ValidatePrincipalAsync(context);
+        if(context.Principal?.Identity?.IsAuthenticated == true)
+        {
+            var manager=context.HttpContext.RequestServices.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<DoyamoyeeMondir.Infrastructure.Identity.ApplicationUser>>();
+            var user=await manager.GetUserAsync(context.Principal);
+            if(user is null || !user.IsActive) context.RejectPrincipal();
+        }
+    };
+});
 
 var app = builder.Build();
 

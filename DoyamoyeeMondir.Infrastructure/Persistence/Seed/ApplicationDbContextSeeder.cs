@@ -56,8 +56,13 @@ public static class ApplicationDbContextSeeder
             }
         }
 
-        const string adminEmail =
-            "admin@doyamoyeemondir.local";
+        // Existing accounts and role assignments are managed through administration, never reseeded.
+        if (await userManager.Users.AnyAsync()) return;
+        var configuration=scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
+        var adminEmail=configuration["BootstrapAdmin:Email"];
+        var adminPassword=configuration["BootstrapAdmin:Password"];
+        if(string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword))
+            throw new InvalidOperationException("No users exist. Configure BootstrapAdmin:Email and BootstrapAdmin:Password for initial setup.");
 
         var administrator =
             await userManager.FindByEmailAsync(adminEmail);
@@ -77,7 +82,7 @@ public static class ApplicationDbContextSeeder
 
             var result = await userManager.CreateAsync(
                 administrator,
-                "Admin@12345");
+                adminPassword);
 
             if (!result.Succeeded)
             {

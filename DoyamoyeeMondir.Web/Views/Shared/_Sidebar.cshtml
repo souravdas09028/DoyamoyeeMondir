@@ -314,13 +314,11 @@
                     </a>
 
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
-                            ব্যবহারকারী
-                        </a>
-
-                        <a class="dropdown-item" href="#">
-                            ভূমিকা ও অনুমতি
-                        </a>
+                        @if(User.IsInRole("SuperAdmin"))
+                        {
+                            <a class="dropdown-item" asp-controller="Users" asp-action="Index">ব্যবহারকারী</a>
+                            <a class="dropdown-item" asp-controller="Users" asp-action="Roles">ভূমিকা ও অনুমতি</a>
+                        }
 
                         <a class="dropdown-item" href="#">
                             হিসাবের বছর
