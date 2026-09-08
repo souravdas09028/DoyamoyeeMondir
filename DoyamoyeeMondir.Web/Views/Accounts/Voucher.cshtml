@@ -1,0 +1,6 @@
+@model DoyamoyeeMondir.Domain.Entities.ExpensePayment
+@{ ViewData["Title"] = "পেমেন্ট ভাউচার"; }
+@section Styles { <style>@@media print { .navbar, .temple-sidebar, .no-print, footer { display:none!important; } .page-wrapper { margin:0!important; } }</style> }
+<div class="container-xl py-4"><div class="card card-body mx-auto" style="max-width:760px"><h1 class="text-center">দয়াময়ী মন্দির</h1><h2 class="h3 text-center">পেমেন্ট ভাউচার</h2><hr/>
+<p>ভাউচার: P-@Model.Id.ToString("D8") · ব্যয়: @Model.ExpenseId</p><p>তারিখ: @Model.Date.ToString("yyyy-MM-dd")</p><p>প্রাপক: @Model.Payee</p><p>হিসাব: @Model.AccountName</p><p><strong>পরিশোধিত: @Model.Amount.ToString("N2") টাকা</strong></p><p>লেনদেন নম্বর: @(Model.Reference ?? "—")</p><p class="mt-5">প্রাপকের স্বাক্ষর: ____________________</p></div>
+<div class="no-print d-flex justify-content-center gap-2 mt-3"><button type="button" onclick="window.print()" class="btn btn-primary">প্রিন্ট করুন</button><a asp-action="Payments" asp-route-expenseId="@Model.ExpenseId" class="btn btn-outline-secondary">পরিশোধের ইতিহাস</a></div></div>

@@ -14,6 +14,8 @@
         </p>
     </div>
 
+    <partial name="_OperationsLinks" />
+    @if(Model.ShowFinance) {
     <div class="row mt-5 g-4">
         <div class="col-md-3">
             <div class="card shadow-sm h-100">
@@ -51,4 +53,5 @@
             </div>
         </div>
     </div>
+    }
 </div>

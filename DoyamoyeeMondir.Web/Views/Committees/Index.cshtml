@@ -1,0 +1,6 @@
+@model List<DoyamoyeeMondir.Domain.Entities.Committee>
+@{ ViewData["Title"] = "কমিটির তালিকা"; var today = DoyamoyeeMondir.Web.Models.TempleDate.Today; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><a asp-action="Edit" class="btn btn-primary my-3">নতুন কমিটি</a><div class="card table-responsive"><table class="table"><thead><tr><th>নাম</th><th>মেয়াদ</th><th>অবস্থা</th><th>কাজ</th></tr></thead><tbody>
+@foreach(var c in Model) { <tr><td>@c.NameBn</td><td>@c.StartDate.ToString("yyyy-MM-dd") — @c.EndDate.ToString("yyyy-MM-dd")</td><td>@(c.StartDate > today ? "আসন্ন" : c.EndDate < today ? "মেয়াদ শেষ" : "বর্তমান")</td><td><a asp-action="Edit" asp-route-id="@c.Id">সম্পাদনা</a> · <a asp-action="Members" asp-route-id="@c.Id">সদস্য ও পদ</a></td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="4">কোনো কমিটি নেই।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

@@ -19,6 +19,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Person> Persons => Set<Person>();
+    public DbSet<ExpensePayment> ExpensePayments => Set<ExpensePayment>();
+    public DbSet<AccountTransfer> AccountTransfers => Set<AccountTransfer>();
+    public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
+    public DbSet<StockMovement> StockMovements => Set<StockMovement>();
+    public DbSet<TempleAsset> TempleAssets => Set<TempleAsset>();
+    public DbSet<Committee> Committees => Set<Committee>();
+    public DbSet<CommitteeMember> CommitteeMembers => Set<CommitteeMember>();
+    public DbSet<TempleDocument> TempleDocuments => Set<TempleDocument>();
     public DbSet<Membership> Memberships => Set<Membership>();
     public DbSet<Income> Incomes => Set<Income>();
     public DbSet<Expense> Expenses => Set<Expense>();

@@ -9,6 +9,8 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
     public void Configure(EntityTypeBuilder<Expense> builder)
     {
         builder.Property(x => x.Amount).HasPrecision(18, 2);
+        builder.Property(x => x.PaidAmount).HasPrecision(18, 2);
+        builder.ToTable("Expenses", t => t.HasCheckConstraint("CK_Expense_Paid", "[PaidAmount] >= 0 AND [PaidAmount] <= [Amount]"));
         builder.Property(x => x.Description).HasMaxLength(1000).IsRequired();
         builder.Property(x => x.ReviewNote).HasMaxLength(1000);
         builder.Property(x => x.RowVersion).IsRowVersion();

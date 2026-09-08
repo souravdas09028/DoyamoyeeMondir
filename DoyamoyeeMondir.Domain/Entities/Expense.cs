@@ -16,6 +16,15 @@ public class Expense : BaseAuditableEntity
     public DateTime? ReviewedAt { get; private set; }
     public string? ReviewNote { get; private set; }
     public Guid SubmissionKey { get; set; }
+    public decimal PaidAmount { get; private set; }
+
+    public void Pay(decimal amount)
+    {
+        if (Status != ApprovalStatus.Approved || amount <= 0 || decimal.Round(amount, 2) != amount || amount > Amount - PaidAmount)
+            throw new InvalidOperationException("Only approved outstanding expenses can be paid.");
+        PaidAmount += amount;
+        if (PaidAmount == Amount) Status = ApprovalStatus.Paid;
+    }
 
     public void Submit(bool requiresApproval)
     {

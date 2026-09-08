@@ -1,0 +1,10 @@
+@model DoyamoyeeMondir.Web.Models.TransferForm
+@{ ViewData["Title"] = "হিসাবের মধ্যে অর্থ স্থানান্তর"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><form asp-action="Transfer" method="post" class="card card-body mt-3" style="max-width:720px"><div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="SubmissionKey" type="hidden"/>
+<label asp-for="FromAccountId">যে হিসাব থেকে</label><select asp-for="FromAccountId" asp-items="ViewBag.Accounts" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
+<label asp-for="ToAccountId">যে হিসাবে</label><select asp-for="ToAccountId" asp-items="ViewBag.Accounts" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
+<label asp-for="Date">তারিখ</label><input asp-for="Date" type="date" class="form-control mb-3"/>
+<label asp-for="Amount">পরিমাণ (টাকা)</label><input asp-for="Amount" type="number" min="0.01" step="0.01" class="form-control mb-3"/>
+<label asp-for="Description">বিবরণ / লেনদেন নম্বর</label><textarea asp-for="Description" class="form-control mb-3"></textarea>
+<p>সম্পন্ন স্থানান্তর নথিভুক্ত করুন। এটি নতুন আয় বা ব্যয় হিসেবে গণনা হবে না।</p>
+<div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">ফিরুন</a></div></form></div>

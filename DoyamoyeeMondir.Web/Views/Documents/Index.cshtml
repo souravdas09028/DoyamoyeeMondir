@@ -1,0 +1,8 @@
+@model List<DoyamoyeeMondir.Domain.Entities.TempleDocument>
+@{ ViewData["Title"] = "দলিল ও নথি"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><a asp-action="Upload" class="btn btn-primary my-3">নতুন নথি</a>
+<form method="get" class="d-flex gap-2 mb-3"><input name="q" value="@ViewBag.Q" class="form-control" aria-label="শিরোনাম বা নথি নম্বর" placeholder="শিরোনাম বা নথি নম্বর"/><button class="btn btn-outline-primary">খুঁজুন</button></form>
+<div class="card table-responsive"><table class="table"><thead><tr><th>শিরোনাম</th><th>নথি নম্বর</th><th>তারিখ</th><th>ফাইল</th></tr></thead><tbody>
+@foreach(var d in Model) { <tr><td>@d.Title</td><td>@d.Reference</td><td>@d.Date.ToString("yyyy-MM-dd")</td><td><a asp-action="Download" asp-route-id="@d.Id">@d.FileName — ডাউনলোড</a></td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="4">কোনো নথি নেই।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

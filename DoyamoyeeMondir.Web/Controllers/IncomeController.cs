@@ -55,7 +55,7 @@ public class IncomeController(ApplicationDbContext db) : Controller
         var existing = await db.Incomes.AsNoTracking().SingleOrDefaultAsync(x => x.SubmissionKey == form.SubmissionKey);
         if (existing != null) return RedirectToAction(nameof(Receipt), new { id = existing.Id });
         var category = await db.IncomeCategories.AsNoTracking().SingleOrDefaultAsync(x => x.Id == form.IncomeCategoryId && x.IsActive);
-        var account = await db.CashBankAccounts.AsNoTracking().SingleOrDefaultAsync(x => x.Id == form.CashBankAccountId && x.IsActive);
+        var account = await db.CashBankAccounts.SingleOrDefaultAsync(x => x.Id == form.CashBankAccountId && x.IsActive);
         if (category is null || account is null) ModelState.AddModelError("", "সক্রিয় আয়ের খাত ও হিসাব নির্বাচন করুন।");
         if (account?.OpeningBalanceDate is DateOnly opening && form.Date < opening) ModelState.AddModelError("", "হিসাবের শুরুর তারিখের আগে সংগ্রহ করা যাবে না।");
         Membership? membership = null;
@@ -87,6 +87,8 @@ public class IncomeController(ApplicationDbContext db) : Controller
         if (service != null) income.ApplyService(service);
         membership?.Collect(form.Amount);
         db.Incomes.Add(income);
+        // Participate in account concurrency so opening terms cannot change during posting.
+        db.Entry(account).Property(x => x.IsActive).IsModified = true;
         // EF saves the income and membership balance together in one transaction.
         try { await db.SaveChangesAsync(); }
         catch (DbUpdateException exception)

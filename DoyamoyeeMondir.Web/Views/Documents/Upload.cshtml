@@ -1,0 +1,8 @@
+@model DoyamoyeeMondir.Web.Models.DocumentForm
+@{ ViewData["Title"] = "নথি সংরক্ষণ"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><form asp-action="Upload" method="post" enctype="multipart/form-data" class="card card-body mt-3" style="max-width:720px"><div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<label asp-for="Title">শিরোনাম</label><input asp-for="Title" class="form-control mb-3"/>
+<label asp-for="Reference">দলিল / নথি নম্বর</label><input asp-for="Reference" class="form-control mb-3"/>
+<label asp-for="Date">নথির তারিখ</label><input asp-for="Date" type="date" class="form-control mb-3"/>
+<label asp-for="Upload">ফাইল (PDF, PNG বা JPEG, সর্বোচ্চ ১০ মেগাবাইট)</label><input asp-for="Upload" type="file" accept=".pdf,.png,.jpg,.jpeg" class="form-control mb-3"/>
+<div><button class="btn btn-primary">আপলোড করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">ফিরুন</a></div></form></div>

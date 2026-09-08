@@ -48,12 +48,30 @@ First increment verification: application build passed with zero warnings/errors
 Run SQL checks with `dotnet run --project tests/DoyamoyeeMondir.Checks -- --sql`. `TEMPLE_TEST_SQL` may override the server connection; the test always substitutes its own uniquely named database and removes only that database.
 Run live HTTP checks with `TEMPLE_TEST_PASSWORD` set, using `python tests/http_smoke.py` against the preview. These checks intentionally leave sample records in that preview.
 
+## Third increment
+- `/Accounts`: balances by date from opening balances, income, actual expense payments and transfers. These are recorded balances, not bank-reconciled balances. Negative recorded balances are displayed, not silently blocked, so missing entries can be investigated.
+- `/Accounts/Pay/{expenseId}`: partial/full payment of approved expenses, protected against overpayment and duplicate submission; `/Accounts/Voucher/{id}` provides a printable payment voucher.
+- `/Accounts/Transfer`: records completed transfers between different accounts without creating income or expense. Transfer history and payment history are paginated.
+- Account postings participate in row-version concurrency; opening terms cannot be changed after income, payments or transfers exist.
+- `/Inventory`: products, units, reorder thresholds, stock receipts/issues and movement history. Unit changes are blocked after movements exist. Stock cannot become negative; backdating before the latest stock movement is blocked. Corrections can be entered as a compensating movement with a reason.
+- `/Assets`: asset/ornament register with unique code, description, material, weight, estimated value, donor, location, custodian and active status.
+- `/Committees`: committee terms, editing and person/position assignments. Duplicate assignment of the same person to a committee is blocked.
+- `/Documents`: searchable document register, upload and authenticated attachment download. PDF/PNG/JPEG signatures and 10 MB size limit are checked. Files are stored in SQL Server, not a public web directory; signature validation is not malware scanning.
+- InventoryManager and DocumentManager can reach their modules from the dashboard without receiving financial dashboard data.
+- Bengali navigation and forms are included; migration `TempleOperations` has been applied to the separate preview database.
+
+### Third increment validation
+- Build passed with zero warnings/errors.
+- 36 domain/validation checks and 17 SQL integration assertions passed. Database checks include duplicate payments/transfers, concurrent payment/stock rollback and account-balance arithmetic.
+- 51 live HTTP checks passed across the existing and new workflows, including overpayment/over-issue rejection, document download protection and antiforgery enforcement.
+- Desktop browser screenshots verified the account balances, inventory register and stock-entry form. Printed-page and mobile layout acceptance are still pending.
+- Run `python tests/http_operations_smoke.py` with `TEMPLE_TEST_PASSWORD` configured to exercise the full preview workflow; it retains clearly named test records in the preview database.
+
 ## Remaining increments
-- Expense settlement, account transfers, reconciled balances and correction/reversal workflows.
-- Inventory, assets/ornaments, committee and document registers.
+- Bank reconciliation and financial correction/reversal workflows.
 - Prasad sales beyond generic income entry; employee/salary workflows.
 - Membership billing recurrence once the client defines its schedule and renewal rules.
 - Bengali Identity screens, user/role administration, visual/print acceptance, operational deployment and backup validation.
 
-Expense approval currently records authorization of the expense, not bank/cash settlement. No payment ledger or account balance is implemented yet.
+Expense approval authorizes the expense; the new payment workflow separately records settlement and affects account balances.
 The existing startup seeder contains a fixed administrator password; replace it with securely configured bootstrap credentials before deployment.

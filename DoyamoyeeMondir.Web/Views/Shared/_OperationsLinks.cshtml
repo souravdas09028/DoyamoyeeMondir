@@ -1,0 +1,6 @@
+<nav class="d-flex flex-wrap gap-2 mt-4" aria-label="মন্দিরের কার্যক্রম">
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("Accountant") || User.IsInRole("Treasurer")) { <a asp-controller="Accounts" asp-action="Index" class="btn btn-outline-primary">নগদ ও ব্যাংক</a> }
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("InventoryManager")) { <a asp-controller="Inventory" asp-action="Index" class="btn btn-outline-primary">মজুত</a> }
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-controller="Assets" asp-action="Index" class="btn btn-outline-primary">সম্পদ ও অলংকার</a><a asp-controller="Committees" asp-action="Index" class="btn btn-outline-primary">কমিটি</a> }
+@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("DocumentManager")) { <a asp-controller="Documents" asp-action="Index" class="btn btn-outline-primary">দলিল ও নথি</a> }
+</nav>

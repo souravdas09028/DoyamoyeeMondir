@@ -60,4 +60,25 @@ Check(!Valid(new MembershipForm { PersonId = 1, MembershipTypeId = 1, StartDate 
 Check(!Valid(new IncomeForm { IncomeCategoryId = 1, CashBankAccountId = 1, Amount = 10, Description = "test", PaymentMethod = (PaymentMethod)999 }), "Unknown payment method is rejected");
 Check(!Valid(new IncomeForm { IncomeCategoryId = 1, CashBankAccountId = 1, Amount = 10, Description = "test", MembershipId = 1, TempleServiceId = 1 }), "Conflicting collection sources are rejected");
 Check(!Valid(new SettingForm { Kind = "income", NameBn = "আয়" }), "Income category requires a code");
+var payable = new Expense { Amount = 100 }; payable.Submit(false); payable.Pay(40);
+Check(payable.PaidAmount == 40 && payable.Status == ApprovalStatus.Approved, "Partial expense payment retains outstanding approval");
+prevented = false; try { payable.Pay(61); } catch (InvalidOperationException) { prevented = true; }
+Check(prevented && payable.PaidAmount == 40, "Expense overpayment is rejected without mutation");
+payable.Pay(60); Check(payable.Status == ApprovalStatus.Paid, "Final payment marks expense paid");
+prevented = false; try { payable.Pay(1); } catch (InvalidOperationException) { prevented = true; }
+Check(prevented, "Paid expense cannot be paid again");
+var awaiting = new Expense { Amount = 100 }; awaiting.Submit(true);
+prevented = false; try { awaiting.Pay(10); } catch (InvalidOperationException) { prevented = true; }
+Check(prevented, "Unapproved expense cannot be paid");
+var rice = new InventoryItem { NameBn = "চাল", Unit = "কেজি" }; rice.Move(10.5m); rice.Move(-3.25m);
+Check(rice.Quantity == 7.25m, "Stock receipts and issues preserve fractional quantities");
+prevented = false; try { rice.Move(-8); } catch (InvalidOperationException) { prevented = true; }
+Check(prevented && rice.Quantity == 7.25m, "Stock cannot become negative");
+rice.IsActive = false; prevented = false; try { rice.Move(1); } catch (InvalidOperationException) { prevented = true; }
+Check(prevented, "Inactive inventory cannot receive movements");
+Check(!Valid(new TransferForm { FromAccountId = 1, ToAccountId = 1, Amount = 10, Description = "test" }), "Transfer cannot use the same account twice");
+Check(!Valid(new CommitteeForm { NameBn = "কমিটি", StartDate = new DateOnly(2026, 9, 8), EndDate = new DateOnly(2026, 9, 7) }), "Committee date range is validated");
+Check(DoyamoyeeMondir.Web.Services.DocumentFiles.Detect(System.Text.Encoding.UTF8.GetBytes("<script>bad</script>")) == null, "Unsupported document content is rejected");
+Check(DoyamoyeeMondir.Web.Services.DocumentFiles.Detect("%PDF-1.4\n"u8.ToArray())?.ContentType == "application/pdf", "PDF signature selects fixed download MIME type");
+Check(DoyamoyeeMondir.Web.Services.DocumentFiles.Detect(new byte[DoyamoyeeMondir.Web.Services.DocumentFiles.MaxBytes + 1]) == null, "Oversized document rejected");
 if (args.Contains("--sql")) await SqlChecks.Run();

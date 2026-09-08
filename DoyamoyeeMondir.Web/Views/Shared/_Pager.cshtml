@@ -1,0 +1,11 @@
+@{
+    int page = ViewBag.Page;
+    var previous = ViewContext.HttpContext.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+    var next = new Dictionary<string, string>(previous);
+    previous["page"] = (page - 1).ToString(); next["page"] = (page + 1).ToString();
+}
+<nav class="d-flex gap-3 mt-3" aria-label="পৃষ্ঠা">
+@if(page > 1) { <a asp-all-route-data="previous">আগের পৃষ্ঠা</a> }
+<span>পৃষ্ঠা @(page)</span>
+@if(ViewBag.HasNext) { <a asp-all-route-data="next">পরের পৃষ্ঠা</a> }
+</nav>

@@ -65,7 +65,9 @@ public class SettingsController(ApplicationDbContext db) : Controller
         if (entity is null) return NotFound();
         if (entity is CashBankAccount oldAccount && form.Id != 0 &&
             (oldAccount.OpeningBalance != form.Amount || oldAccount.OpeningBalanceDate != form.OpeningDate) &&
-            await db.Incomes.AnyAsync(x => x.CashBankAccountId == form.Id))
+            (await db.Incomes.AnyAsync(x => x.CashBankAccountId == form.Id) ||
+             await db.ExpensePayments.AnyAsync(x => x.CashBankAccountId == form.Id) ||
+             await db.AccountTransfers.AnyAsync(x => x.FromAccountId == form.Id || x.ToAccountId == form.Id)))
         {
             ModelState.AddModelError("", "লেনদেন রয়েছে এমন হিসাবের প্রারম্ভিক স্থিতি ও তারিখ পরিবর্তন করা যাবে না।");
             return View(form);

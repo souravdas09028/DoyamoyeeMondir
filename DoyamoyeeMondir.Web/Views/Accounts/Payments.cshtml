@@ -1,0 +1,6 @@
+@model List<DoyamoyeeMondir.Domain.Entities.ExpensePayment>
+@{ ViewData["Title"] = "পরিশোধের ইতিহাস"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><div class="card table-responsive my-3"><table class="table"><thead><tr><th>ভাউচার</th><th>তারিখ</th><th>ব্যয়</th><th>প্রাপক</th><th>হিসাব</th><th>টাকা</th></tr></thead><tbody>
+@foreach(var p in Model) { <tr><td><a asp-action="Voucher" asp-route-id="@p.Id">P-@p.Id.ToString("D8")</a></td><td>@p.Date.ToString("yyyy-MM-dd")</td><td>@p.ExpenseId</td><td>@p.Payee</td><td>@p.AccountName</td><td>@p.Amount.ToString("N2")</td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="6">কোনো পরিশোধ নেই।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

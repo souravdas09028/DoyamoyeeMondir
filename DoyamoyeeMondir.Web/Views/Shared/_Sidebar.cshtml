@@ -114,15 +114,15 @@
                     </a>
 
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Committees" asp-action="Index">
                             কমিটি তালিকা
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Committees" asp-action="Edit">
                             নতুন কমিটি
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Committees" asp-action="Index">
                             কমিটির সদস্য
                         </a>
                     </div>
@@ -186,7 +186,7 @@
                             ব্যয়ের তালিকা
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Accounts" asp-action="Payments">
                             পেমেন্ট ভাউচার
                         </a>
                     </div>
@@ -232,26 +232,26 @@
                     </a>
 
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Inventory" asp-action="Index">
                             পণ্যের তালিকা
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Inventory" asp-action="Index">
                             স্টক গ্রহণ
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Inventory" asp-action="Index">
                             স্টক ব্যবহার
                         </a>
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Inventory" asp-action="Index">
                             বর্তমান স্টক
                         </a>
                     </div>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" asp-controller="Assets" asp-action="Index">
                         <span class="nav-link-icon">
                             <i class="ti ti-diamond"></i>
                         </span>
@@ -275,7 +275,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" asp-controller="Documents" asp-action="Index">
                         <span class="nav-link-icon">
                             <i class="ti ti-files"></i>
                         </span>

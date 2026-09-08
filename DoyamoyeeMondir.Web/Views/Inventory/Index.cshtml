@@ -1,0 +1,8 @@
+@model List<DoyamoyeeMondir.Domain.Entities.InventoryItem>
+@{ ViewData["Title"] = "পণ্য ও বর্তমান মজুত"; }
+<div class="container-xl py-4"><h1>@ViewData["Title"]</h1><a asp-action="Edit" class="btn btn-primary my-3">নতুন পণ্য</a>
+<form method="get" class="d-flex gap-2 mb-3"><input name="q" value="@ViewBag.Q" class="form-control" aria-label="পণ্যের নাম" placeholder="পণ্যের নাম"/><button class="btn btn-outline-primary">খুঁজুন</button></form>
+<div class="card table-responsive"><table class="table"><thead><tr><th>পণ্য</th><th>মজুত</th><th>একক</th><th>অবস্থা</th><th>কাজ</th></tr></thead><tbody>
+@foreach(var i in Model) { <tr><td>@i.NameBn</td><td class="@(i.Quantity <= i.ReorderLevel ? "text-danger" : "")">@i.Quantity.ToString("0.###") @if(i.Quantity <= i.ReorderLevel) { <small>কম মজুত</small> }</td><td>@i.Unit</td><td>@(i.IsActive ? "সক্রিয়" : "নিষ্ক্রিয়")</td><td><a asp-action="Edit" asp-route-id="@i.Id">সম্পাদনা</a> · <a asp-action="History" asp-route-id="@i.Id">ইতিহাস</a>@if(i.IsActive) { <span> · </span><a asp-action="Move" asp-route-id="@i.Id" asp-route-receipt="true">গ্রহণ</a><span> · </span><a asp-action="Move" asp-route-id="@i.Id" asp-route-receipt="false">ব্যবহার</a> }</td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="5">কোনো পণ্য নেই।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

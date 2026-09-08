@@ -1,0 +1,6 @@
+@model List<DoyamoyeeMondir.Domain.Entities.StockMovement>
+@{ var item = (DoyamoyeeMondir.Domain.Entities.InventoryItem)ViewBag.Item; ViewData["Title"] = "মজুত রেজিস্টার"; }
+<div class="container-xl py-4"><h1>@item.NameBn — মজুত রেজিস্টার</h1><p>বর্তমান: @item.Quantity.ToString("0.###") @item.Unit</p><div class="card table-responsive"><table class="table"><thead><tr><th>তারিখ</th><th>গ্রহণ (+) / ব্যবহার (−)</th><th>কারণ</th></tr></thead><tbody>
+@foreach(var s in Model) { <tr><td>@s.Date.ToString("yyyy-MM-dd")</td><td>@s.Change.ToString("+0.###;-0.###") @item.Unit</td><td>@s.Reason</td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="3">কোনো মজুত লেনদেন নেই।</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

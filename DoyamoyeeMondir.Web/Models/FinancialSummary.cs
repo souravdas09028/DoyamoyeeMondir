@@ -14,6 +14,7 @@ public class FinancialSummary
 public record SummaryRow(string Name, decimal Amount);
 public class DashboardSummary
 {
+    public bool ShowFinance { get; set; } = true;
     public decimal TodayIncome { get; set; }
     public decimal TodayExpenses { get; set; }
     public int MemberCount { get; set; }
