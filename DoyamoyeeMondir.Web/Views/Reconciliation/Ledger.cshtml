@@ -1,0 +1,7 @@
+@model List<DoyamoyeeMondir.Web.Controllers.LedgerRow>
+@{ ViewData["Title"]="হিসাবের লেনদেন"; DoyamoyeeMondir.Domain.Entities.CashBankAccount a=ViewBag.Account; DoyamoyeeMondir.Web.Models.AccountBalance? balance=ViewBag.Balance; }
+<div class="container-xl py-4"><h1>@a.AccountNameBn — লেনদেন</h1><form method="get" class="d-flex gap-2 my-3"><input type="hidden" name="id" value="@a.Id"/><input type="date" name="date" aria-label="শেষ তারিখ" value="@(((DateOnly)ViewBag.Date).ToString("yyyy-MM-dd"))" class="form-control" style="max-width:220px"/><button class="btn btn-outline-primary">দেখুন</button></form>
+<p>প্রারম্ভিক: @a.OpeningBalance.ToString("N2") · তারিখ পর্যন্ত স্থিতি: @(balance?.Balance.ToString("N2")??"হিসাব শুরু হয়নি") · বন্ধ তারিখ: @(a.ClosedThrough?.ToString("yyyy-MM-dd")??"নেই")</p>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>তারিখ</th><th>ধরন / নম্বর</th><th>বিবরণ</th><th>পরিবর্তন (+ / −)</th></tr></thead><tbody>
+@foreach(var r in Model) { <tr><td>@r.Date.ToString("yyyy-MM-dd")</td><td>@(r.Kind switch {1=>"আয়",2=>"পরিশোধ",3=>"স্থানান্তর",_=>"সংশোধন"}) #@r.Id</td><td>@r.Description</td><td>@r.Change.ToString("N2")</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

@@ -1,0 +1,7 @@
+@model List<DoyamoyeeMondir.Domain.Entities.FinancialReversal>
+@{ ViewData["Title"]="আর্থিক সংশোধন"; }
+<div class="container-xl py-4"><h1>আর্থিক সংশোধন</h1><p>মূল রসিদ বা ভাউচার খুলে সংশোধন করুন। মূল রেকর্ড অপরিবর্তিত থাকে; বিপরীত লেনদেন সংশোধনের তারিখে হিসাবের সঙ্গে যুক্ত হয়।</p>
+<form asp-action="Reverse" method="get" class="d-flex flex-wrap gap-2 mb-3"><select name="kind" class="form-select" style="max-width:220px" aria-label="লেনদেনের ধরন"><option value="1">আয়ের রসিদ</option><option value="2">পরিশোধ ভাউচার</option><option value="3">হিসাব স্থানান্তর</option><option value="4">অনুমোদিত ব্যয় বাতিল</option></select><input type="number" name="id" min="1" required placeholder="রেকর্ড নম্বর" aria-label="রেকর্ড নম্বর" class="form-control" style="max-width:180px"/><button class="btn btn-outline-primary">লেনদেন দেখুন</button></form>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>সংশোধন</th><th>তারিখ</th><th>মূল লেনদেন</th><th>টাকা</th><th>কারণ</th><th>সম্পাদনকারী</th></tr></thead><tbody>
+@foreach(var r in Model) { <tr><td>#@r.Id</td><td>@r.Date.ToString("yyyy-MM-dd")</td><td>@(r.SourceKind switch {1=>"আয়",2=>"পরিশোধ",3=>"স্থানান্তর",_=>"ব্যয় বাতিল"}) #@r.SourceId</td><td>@r.Amount.ToString("N2")</td><td>@r.Reason</td><td>@r.CreatedBy</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

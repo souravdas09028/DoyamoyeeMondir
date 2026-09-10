@@ -1,0 +1,7 @@
+@model DoyamoyeeMondir.Web.Models.ReversalForm
+@{ ViewData["Title"]="লেনদেন সংশোধন"; DoyamoyeeMondir.Web.Models.ReversalSource s=ViewBag.Source; }
+<div class="container-xl py-4"><h1>লেনদেন সংশোধন</h1><div class="card card-body" style="max-width:720px"><p><strong>@s.Name</strong><br/>মূল তারিখ: @s.Date.ToString("yyyy-MM-dd") · পরিমাণ: @s.Amount.ToString("N2") টাকা · রেকর্ড #@Model.SourceId</p>
+<p>এই কাজ পুরো লেনদেনের বিপরীত এন্ট্রি তৈরি করবে। টাকা ফেরত দেওয়া/পাওয়া বা ভুল এন্ট্রি সংশোধন নিশ্চিত করার পর সংরক্ষণ করুন। প্রসাদ বিক্রয়ের ক্ষেত্রে সব পণ্য মজুতে ফেরত আসবে; আংশিক ফেরত এখানে গ্রহণযোগ্য নয়। সঠিক লেনদেন প্রয়োজন হলে পরে নতুন করে লিখুন।</p>
+<form asp-action="Reverse" method="post"><div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="SourceKind" type="hidden"/><input asp-for="SourceId" type="hidden"/><input asp-for="Version" type="hidden"/><input asp-for="SubmissionKey" type="hidden"/>
+<label asp-for="Date">সংশোধনের তারিখ</label><input asp-for="Date" type="date" class="form-control mb-3"/>
+<label asp-for="Reason">কারণ</label><textarea asp-for="Reason" class="form-control mb-3"></textarea><button class="btn btn-danger">সম্পূর্ণ লেনদেন সংশোধন করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">ফিরুন</a></form></div></div>

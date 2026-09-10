@@ -17,8 +17,8 @@ public class HomeController(ApplicationDbContext db) : Controller
             return View(new DashboardSummary { ShowFinance = false });
         var today = TempleDate.Today;
         return View(new DashboardSummary {
-            TodayIncome = await db.Incomes.Where(x => x.Date == today).SumAsync(x => (decimal?)x.Amount) ?? 0,
-            TodayExpenses = await db.Expenses.Where(x => x.Date == today && (x.Status == ApprovalStatus.Approved || x.Status == ApprovalStatus.Paid)).SumAsync(x => (decimal?)x.Amount) ?? 0,
+            TodayIncome = (await db.Incomes.Where(x => x.Date == today).SumAsync(x => (decimal?)x.Amount) ?? 0) + (await db.FinancialReversals.Where(x=>x.Date==today).SumAsync(x=>(decimal?)x.IncomeDelta)??0),
+            TodayExpenses = (await db.Expenses.Where(x => x.Date == today && (x.Status == ApprovalStatus.Approved || x.Status == ApprovalStatus.Paid || x.Status == ApprovalStatus.Cancelled)).SumAsync(x => (decimal?)x.Amount) ?? 0) + (await db.FinancialReversals.Where(x=>x.Date==today).SumAsync(x=>(decimal?)x.ExpenseDelta)??0),
             MemberCount = await db.Memberships.Where(x => x.StartDate <= today && (!x.EndDate.HasValue || x.EndDate >= today)).Select(x => x.PersonId).Distinct().CountAsync(),
             PendingCount = await db.Expenses.CountAsync(x => x.Status == ApprovalStatus.Submitted)
         });

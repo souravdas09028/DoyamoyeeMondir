@@ -57,7 +57,7 @@ public class IncomeController(ApplicationDbContext db) : Controller
         var category = await db.IncomeCategories.AsNoTracking().SingleOrDefaultAsync(x => x.Id == form.IncomeCategoryId && x.IsActive);
         var account = await db.CashBankAccounts.SingleOrDefaultAsync(x => x.Id == form.CashBankAccountId && x.IsActive);
         if (category is null || account is null) ModelState.AddModelError("", "সক্রিয় আয়ের খাত ও হিসাব নির্বাচন করুন।");
-        if (account?.OpeningBalanceDate is DateOnly opening && form.Date < opening) ModelState.AddModelError("", "হিসাবের শুরুর তারিখের আগে সংগ্রহ করা যাবে না।");
+        if (account != null && !account.CanPost(form.Date)) ModelState.AddModelError("", "হিসাবের শুরুর তারিখের আগে সংগ্রহ করা যাবে না।");
         Membership? membership = null;
         if (form.MembershipId.HasValue)
         {
@@ -104,6 +104,7 @@ public class IncomeController(ApplicationDbContext db) : Controller
     public async Task<IActionResult> Receipt(int id)
     {
         var income = await db.Incomes.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+        ViewBag.Reversal=await db.FinancialReversals.AsNoTracking().SingleOrDefaultAsync(x=>x.SourceKind==1 && x.SourceId==id);
         return income is null ? NotFound() : View(income);
     }
     private async Task Choices()

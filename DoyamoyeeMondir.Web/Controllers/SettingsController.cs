@@ -65,7 +65,7 @@ public class SettingsController(ApplicationDbContext db) : Controller
         if (entity is null) return NotFound();
         if (entity is CashBankAccount oldAccount && form.Id != 0 &&
             (oldAccount.OpeningBalance != form.Amount || oldAccount.OpeningBalanceDate != form.OpeningDate) &&
-            (await db.Incomes.AnyAsync(x => x.CashBankAccountId == form.Id) ||
+            (oldAccount.ClosedThrough.HasValue || await db.BankReconciliations.AnyAsync(x=>x.CashBankAccountId==form.Id) || await db.Incomes.AnyAsync(x => x.CashBankAccountId == form.Id) ||
              await db.ExpensePayments.AnyAsync(x => x.CashBankAccountId == form.Id) ||
              await db.AccountTransfers.AnyAsync(x => x.FromAccountId == form.Id || x.ToAccountId == form.Id)))
         {

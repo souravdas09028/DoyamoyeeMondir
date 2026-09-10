@@ -109,5 +109,5 @@ public class DocumentForm
     public DateOnly Date { get; set; } = TempleDate.Today;
     [Required(ErrorMessage = "নথির ফাইল নির্বাচন করুন।")] public IFormFile? Upload { get; set; }
 }
-public record AccountBalance(int Id, string Name, decimal Opening, decimal Income, decimal Payments, decimal TransferIn, decimal TransferOut)
-{ public decimal Balance => Opening + Income - Payments + TransferIn - TransferOut; }
+public record AccountBalance(int Id, string Name, decimal Opening, decimal Income, decimal Payments, decimal TransferIn, decimal TransferOut, decimal Corrections = 0)
+{ public decimal Balance => Opening + Income - Payments + TransferIn - TransferOut + Corrections; }

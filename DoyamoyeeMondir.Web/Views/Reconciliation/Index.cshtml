@@ -1,0 +1,8 @@
+@model List<DoyamoyeeMondir.Domain.Entities.BankReconciliation>
+@{ ViewData["Title"]="ব্যাংক সমন্বয়"; }
+<div class="container-xl py-4"><h1>ব্যাংক সমন্বয়</h1>
+@if(!User.IsInRole("Auditor") || User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin") || User.IsInRole("Accountant") || User.IsInRole("Treasurer")) { <a asp-action="Create" class="btn btn-primary my-3">স্টেটমেন্ট যাচাই করুন</a> }
+<p>স্টেটমেন্ট ও খাতার স্থিতি সমান হলে প্রশাসক সময়সীমা বন্ধ করতে পারবেন। বন্ধ তারিখ পর্যন্ত নতুন নগদ লেনদেন যোগ করা যাবে না।</p>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>হিসাব / তারিখ</th><th>স্টেটমেন্ট</th><th>খাতা</th><th>পার্থক্য</th><th>অবস্থা</th><th>রেফারেন্স</th></tr></thead><tbody>
+@foreach(var r in Model) { <tr><td><a asp-action="Ledger" asp-route-id="@r.CashBankAccountId" asp-route-date="@r.Date.ToString("yyyy-MM-dd")">@r.CashBankAccount.AccountNameBn</a><br/>@r.Date.ToString("yyyy-MM-dd")</td><td>@r.StatementBalance.ToString("N2")</td><td>@r.BookBalance.ToString("N2")</td><td>@((r.StatementBalance-r.BookBalance).ToString("N2"))</td><td>@(r.IsClosed?"যাচাইকৃত ও বন্ধ":"শুধু যাচাই; বন্ধ নয়")</td><td>@r.Reference</td></tr> }
+</tbody></table></div><partial name="_Pager"/></div>

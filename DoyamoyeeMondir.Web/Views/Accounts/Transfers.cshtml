@@ -1,6 +1,6 @@
 @model List<DoyamoyeeMondir.Domain.Entities.AccountTransfer>
 @{ ViewData["Title"] = "স্থানান্তরের ইতিহাস"; }
 <div class="container-xl py-4"><h1>@ViewData["Title"]</h1><a asp-action="Transfer" class="btn btn-primary my-3">নতুন স্থানান্তর</a><div class="card table-responsive"><table class="table"><thead><tr><th>তারিখ</th><th>যে হিসাব থেকে</th><th>যে হিসাবে</th><th>বিবরণ</th><th>টাকা</th></tr></thead><tbody>
-@foreach(var t in Model) { <tr><td>@t.Date.ToString("yyyy-MM-dd")</td><td>@t.FromAccount.AccountNameBn</td><td>@t.ToAccount.AccountNameBn</td><td>@t.Description</td><td>@t.Amount.ToString("N2")</td></tr> }
+@foreach(var t in Model) { <tr><td>@t.Date.ToString("yyyy-MM-dd")</td><td>@t.FromAccount.AccountNameBn</td><td>@t.ToAccount.AccountNameBn</td><td>#@t.Id · @t.Description @if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-controller="Corrections" asp-action="Reverse" asp-route-kind="3" asp-route-id="@t.Id">সংশোধন / অবস্থা</a> }</td><td>@t.Amount.ToString("N2")</td></tr> }
 @if(Model.Count == 0) { <tr><td colspan="5">কোনো স্থানান্তর নেই।</td></tr> }
 </tbody></table></div><partial name="_Pager"/></div>

@@ -2,9 +2,10 @@
 @{ ViewData["Title"] = "নগদ ও ব্যাংকের হিসাব"; }
 <div class="container-xl py-4"><h1>@ViewData["Title"]</h1>
 <div class="d-flex flex-wrap gap-2 my-3"><a asp-action="Transfer" class="btn btn-primary">হিসাবের মধ্যে স্থানান্তর</a><a asp-action="Transfers" class="btn btn-outline-primary">স্থানান্তরের ইতিহাস</a><a asp-action="Payments" class="btn btn-outline-primary">পরিশোধের তালিকা</a></div>
+<div class="d-flex gap-2 mb-3"><a asp-controller="Reconciliation" asp-action="Index" class="btn btn-outline-primary">ব্যাংক সমন্বয়</a>@if(User.IsInRole("SuperAdmin") || User.IsInRole("TempleAdmin")) { <a asp-controller="Corrections" asp-action="Index" class="btn btn-outline-primary">আর্থিক সংশোধন</a> }</div>
 <form method="get" class="d-flex gap-2 align-items-end mb-3"><label>এই তারিখ পর্যন্ত<input type="date" name="asOf" value="@(((DateOnly)ViewBag.AsOf).ToString("yyyy-MM-dd"))" class="form-control"/></label><button class="btn btn-outline-primary">দেখুন</button></form>
-<p>প্রারম্ভিক স্থিতি + সংগ্রহ − পরিশোধ + আগত স্থানান্তর − বহির্গত স্থানান্তর। অপেক্ষমাণ বা অপরিশোধিত ব্যয় এতে বাদ যায় না। ব্যাংক স্টেটমেন্টের সঙ্গে সমন্বয় আলাদাভাবে করতে হবে।</p>
-<div class="card table-responsive"><table class="table"><thead><tr><th>হিসাব</th><th>প্রারম্ভিক</th><th>সংগ্রহ</th><th>পরিশোধ</th><th>স্থানান্তর (+ / −)</th><th>স্থিতি (টাকা)</th></tr></thead><tbody>
-@foreach(var a in Model) { <tr><td>@a.Name</td><td>@a.Opening.ToString("N2")</td><td>@a.Income.ToString("N2")</td><td>@a.Payments.ToString("N2")</td><td>@a.TransferIn.ToString("N2") / @a.TransferOut.ToString("N2")</td><td class="@(a.Balance < 0 ? "text-danger" : "")"><strong>@a.Balance.ToString("N2")</strong></td></tr> }
-@if(Model.Count == 0) { <tr><td colspan="6">এই তারিখে কোনো হিসাব নেই। অ্যাডমিন সেটিংস থেকে হিসাব যোগ করুন।</td></tr> }
+<p>প্রারম্ভিক স্থিতি + সংগ্রহ − পরিশোধ + আগত স্থানান্তর − বহির্গত স্থানান্তর + সংশোধন। অপেক্ষমাণ বা অপরিশোধিত ব্যয় এতে বাদ যায় না। ব্যাংক স্টেটমেন্টের সঙ্গে সমন্বয় আলাদাভাবে করতে হবে।</p>
+<div class="card table-responsive"><table class="table"><thead><tr><th>হিসাব</th><th>প্রারম্ভিক</th><th>সংগ্রহ</th><th>পরিশোধ</th><th>স্থানান্তর (+ / −)</th><th>সংশোধন</th><th>স্থিতি (টাকা)</th></tr></thead><tbody>
+@foreach(var a in Model) { <tr><td><a asp-controller="Reconciliation" asp-action="Ledger" asp-route-id="@a.Id">@a.Name</a></td><td>@a.Opening.ToString("N2")</td><td>@a.Income.ToString("N2")</td><td>@a.Payments.ToString("N2")</td><td>@a.TransferIn.ToString("N2") / @a.TransferOut.ToString("N2")</td><td>@a.Corrections.ToString("N2")</td><td class="@(a.Balance < 0 ? "text-danger" : "")"><strong>@a.Balance.ToString("N2")</strong></td></tr> }
+@if(Model.Count == 0) { <tr><td colspan="7">এই তারিখে কোনো হিসাব নেই। অ্যাডমিন সেটিংস থেকে হিসাব যোগ করুন।</td></tr> }
 </tbody></table></div></div>

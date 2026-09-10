@@ -68,8 +68,8 @@ Run live HTTP checks with `TEMPLE_TEST_PASSWORD` set, using `python tests/http_s
 - Run `python tests/http_operations_smoke.py` with `TEMPLE_TEST_PASSWORD` configured to exercise the full preview workflow; it retains clearly named test records in the preview database.
 
 ## Remaining increments
-- Bank reconciliation and financial correction/reversal workflows.
-- Prasad returns/refunds remain part of the financial reversal workflow; ordinary prasad sales are complete below.
+- Partial refunds, reopening closed bank periods and correction/reissue of rejected or cancelled payroll remain extensions to the full-reversal workflow below.
+- Full prasad returns/refunds are implemented below. Partial returns and refunds without a stock return are not supported.
 - Membership billing recurrence once the client defines its schedule and renewal rules.
 - Remaining Bengali Identity screens (beyond login), visual/print acceptance, operational deployment and backup validation. User/role administration is complete below.
 
@@ -110,3 +110,17 @@ The startup seeder now requires configured bootstrap credentials only for an emp
 - No new migration is needed; the existing UserAudits table is used. Production was not modified.
 - Validation: final incremental build passed with zero warnings/errors. Eighteen live HTTP checks passed, including role enforcement, session revocation, stale updates, duplicate email, password reset, audit secrecy, self-demotion protection and antiforgery. Desktop screenshots checked the list and creation form. Test account deactivated and preview stopped after testing.
 - Run `python tests/http_users_smoke.py` with `TEMPLE_TEST_PASSWORD` set against the isolated local preview. It retains an inactive test user and its audit history.
+
+## Financial reversals and bank reconciliation
+- `/Corrections`: SuperAdmin/TempleAdmin full reversal of income receipts, expense payments and account transfers, plus cancellation of approved unpaid expenses. Reasons, actor and timestamps are retained; originals are not deleted or overwritten.
+- Receipt and payment voucher pages display reversal status, date and reason. Administrators can begin corrections there, from expense/transfer lists, or by selecting the source type and database record number in the correction register.
+- Membership refunds restore outstanding dues. Full prasad refunds restore all sale stock; only use that workflow when the goods are returned (or the original stock issue was erroneous). Payment reversals reopen expense balances; reverse every payment before cancelling its expense.
+- Original transactions stay in historical date ranges. Balances, dashboard and financial reports include inverse amounts on the correction date. Income lists explicitly display original gross receipt totals, with net figures in reports.
+- `/Reconciliation`: manual bank-statement closing-balance comparison, immutable snapshots of book/statement balances and differences. Accountants and treasurers can record comparisons; administrators can close a matched period; auditors can view.
+- `/Reconciliation/Ledger/{accountId}` provides paginated income/payment/transfer/reversal entries alongside opening and as-of balances. It is available from the account balances page.
+- Closed bank periods reject income, payments, transfers, prasad sales and monetary reversals dated on/before the cutoff. Account row-version participation detects competing postings and period closes. Opening terms cannot be changed after reconciliation exists.
+- Reconciliation is a manual balance comparison, not automatic bank import or transaction-level clearing/outstanding-cheque matching. Closed periods cannot currently be reopened; corrections must be entered in a later open period. The original accrual expense date itself is not governed by a bank account cutoff.
+- Payroll expenses can have payments reversed and be cancelled, but replacement payroll for the same employee/month is still pending. Do not bypass payroll uniqueness by entering a second generic salary expense.
+- Migration `FinancialCorrectionsAndReconciliation` adds rowversions, precision and uniqueness/validation constraints. Applied only to the separate local preview; production was not changed.
+- Validation: application/test build passed (four pre-existing lowercase migration-class warnings on the full build); 36 domain checks and 49 SQL integration assertions passed. Fifteen live HTTP checks passed including the prasad fixture, full refund, duplicate refund, mismatch recording, matched close and closed-period rejection. Desktop reconciliation screen visually reviewed.
+- Run `python tests/http_corrections_smoke.py` with `TEMPLE_TEST_PASSWORD` configured against local preview; it retains named test records and closes only its newly created test bank account. Preview stopped after testing to release build DLLs.

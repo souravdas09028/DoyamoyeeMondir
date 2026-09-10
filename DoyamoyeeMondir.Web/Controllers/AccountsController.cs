@@ -14,12 +14,7 @@ public class AccountsController(ApplicationDbContext db) : Controller
     public async Task<IActionResult> Index(DateOnly? asOf)
     {
         var date = asOf ?? TempleDate.Today; ViewBag.AsOf = date;
-        return View(await db.CashBankAccounts.AsNoTracking().Where(a => !a.OpeningBalanceDate.HasValue || a.OpeningBalanceDate <= date)
-            .OrderBy(a => a.AccountNameBn).Select(a => new AccountBalance(a.Id, a.AccountNameBn, a.OpeningBalance,
-                db.Incomes.Where(x => x.CashBankAccountId == a.Id && x.Date <= date).Sum(x => (decimal?)x.Amount) ?? 0,
-                db.ExpensePayments.Where(x => x.CashBankAccountId == a.Id && x.Date <= date).Sum(x => (decimal?)x.Amount) ?? 0,
-                db.AccountTransfers.Where(x => x.ToAccountId == a.Id && x.Date <= date).Sum(x => (decimal?)x.Amount) ?? 0,
-                db.AccountTransfers.Where(x => x.FromAccountId == a.Id && x.Date <= date).Sum(x => (decimal?)x.Amount) ?? 0)).ToListAsync());
+        return View(await DoyamoyeeMondir.Web.Services.AccountLedger.Balances(db,date).ToListAsync());
     }
     public async Task<IActionResult> Pay(int id)
     {
@@ -37,7 +32,7 @@ public class AccountsController(ApplicationDbContext db) : Controller
         var account = await db.CashBankAccounts.SingleOrDefaultAsync(x => x.Id == form.CashBankAccountId && x.IsActive);
         if (expense is null || account is null) ModelState.AddModelError("", "ব্যয় ও সক্রিয় হিসাব নির্বাচন করুন।");
         if (expense != null && (expense.Status != ApprovalStatus.Approved || form.Amount > expense.Amount - expense.PaidAmount)) ModelState.AddModelError("", "শুধু অনুমোদিত বকেয়া পরিমাণ পরিশোধ করা যাবে।");
-        if (expense != null && form.Date < expense.Date || account?.OpeningBalanceDate is DateOnly opened && form.Date < opened) ModelState.AddModelError("", "ব্যয় বা হিসাব শুরুর আগের তারিখে পরিশোধ করা যাবে না।");
+        if (expense != null && form.Date < expense.Date || account != null && !account.CanPost(form.Date)) ModelState.AddModelError("", "ব্যয় বা হিসাব শুরুর আগের তারিখে পরিশোধ করা যাবে না।");
         if (!ModelState.IsValid) { await Choices(); return View(form); }
         expense!.Pay(form.Amount);
         var payment = new ExpensePayment { ExpenseId = expense.Id, CashBankAccountId = account!.Id, AccountName = account.AccountNameBn,
@@ -56,6 +51,7 @@ public class AccountsController(ApplicationDbContext db) : Controller
     public async Task<IActionResult> Voucher(int id)
     {
         var p = await db.ExpensePayments.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+        ViewBag.Reversal=await db.FinancialReversals.AsNoTracking().SingleOrDefaultAsync(x=>x.SourceKind==2 && x.SourceId==id);
         return p is null ? NotFound() : View(p);
     }
     public async Task<IActionResult> Payments(int? expenseId, int page = 1)
@@ -71,7 +67,7 @@ public class AccountsController(ApplicationDbContext db) : Controller
     {
         if (await db.AccountTransfers.AnyAsync(x => x.SubmissionKey == form.SubmissionKey)) return RedirectToAction(nameof(Transfers));
         var accounts = await db.CashBankAccounts.Where(x => x.IsActive && (x.Id == form.FromAccountId || x.Id == form.ToAccountId)).ToListAsync();
-        if (accounts.Count != 2 || accounts.Any(x => x.OpeningBalanceDate > form.Date)) ModelState.AddModelError("", "দুটি সক্রিয় হিসাব এবং হিসাব শুরুর পরের তারিখ নির্বাচন করুন।");
+        if (accounts.Count != 2 || accounts.Any(x => !x.CanPost(form.Date))) ModelState.AddModelError("", "দুটি সক্রিয় হিসাব এবং হিসাব শুরুর পরের তারিখ নির্বাচন করুন।");
         if (!ModelState.IsValid) { await Choices(); return View(form); }
         db.AccountTransfers.Add(new AccountTransfer { FromAccountId = form.FromAccountId, ToAccountId = form.ToAccountId, Date = form.Date, Amount = form.Amount, Description = form.Description.Trim(), SubmissionKey = form.SubmissionKey });
         foreach (var account in accounts) db.Entry(account).Property(x => x.IsActive).IsModified = true;

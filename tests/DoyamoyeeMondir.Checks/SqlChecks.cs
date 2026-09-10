@@ -68,6 +68,7 @@ internal static class SqlChecks
             await OperationSqlChecks.Run(options);
             await PayrollSqlChecks.Run(options);
             await PrasadSqlChecks.Run(options);
+            await CorrectionSqlChecks.Run(options);
             Console.WriteLine("PASS: SQL migration and integration checks");
 
             Income NewIncome(decimal amount) => new() { Amount = amount, MembershipId = membership.Id, PersonId = person.Id, IncomeCategoryId = category.Id, CashBankAccountId = account.Id,

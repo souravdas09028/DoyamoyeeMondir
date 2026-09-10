@@ -3,7 +3,7 @@
 <div class="container-xl py-4"><h1>@ViewData["Title"]</h1>
 <div class="d-flex flex-wrap gap-2 my-3"><a asp-action="Create" class="btn btn-primary">নতুন আয় / অনুদান</a><a asp-controller="Memberships" asp-action="Index" class="btn btn-outline-primary">চাঁদা সংগ্রহ</a><a asp-action="Services" class="btn btn-outline-primary">সেবার ফি</a></div>
 <form method="get" class="d-flex flex-wrap gap-2 align-items-end mb-3"><input type="hidden" name="personId" value="@ViewBag.PersonId"/><input type="hidden" name="membershipId" value="@ViewBag.MembershipId"/><label>শুরু<input type="date" name="from" value="@ViewBag.From" class="form-control"/></label><label>শেষ<input type="date" name="to" value="@ViewBag.To" class="form-control"/></label><button class="btn btn-outline-primary">দেখুন</button></form>
-<p>নির্বাচিত তালিকার মোট সংগ্রহ: @(((decimal)ViewBag.Total).ToString("N2")) টাকা</p>
+<p>মূল রসিদগুলোর মোট: @(((decimal)ViewBag.Total).ToString("N2")) টাকা। ফেরত বাদে নিট সংগ্রহ প্রতিবেদনে দেখুন; সংশোধনের অবস্থা রসিদে লেখা থাকে।</p>
 <div class="card table-responsive"><table class="table"><thead><tr><th>রসিদ / তারিখ</th><th>দাতা</th><th>খাত / বিবরণ</th><th>হিসাব</th><th>টাকা</th></tr></thead><tbody>
 @foreach(var i in Model) { <tr><td><a asp-action="Receipt" asp-route-id="@i.Id">R-@i.Id.ToString("D8")</a><br/>@i.Date.ToString("yyyy-MM-dd")</td><td>@i.PayerName</td><td>@i.CategoryName<br/>@i.Description</td><td>@i.AccountName</td><td>@i.Amount.ToString("N2")</td></tr> }
 @if(Model.Count == 0) { <tr><td colspan="5">কোনো সংগ্রহ পাওয়া যায়নি।</td></tr> }
