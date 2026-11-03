@@ -82,3 +82,43 @@ Check(DoyamoyeeMondir.Web.Services.DocumentFiles.Detect(System.Text.Encoding.UTF
 Check(DoyamoyeeMondir.Web.Services.DocumentFiles.Detect("%PDF-1.4\n"u8.ToArray())?.ContentType == "application/pdf", "PDF signature selects fixed download MIME type");
 Check(DoyamoyeeMondir.Web.Services.DocumentFiles.Detect(new byte[DoyamoyeeMondir.Web.Services.DocumentFiles.MaxBytes + 1]) == null, "Oversized document rejected");
 if (args.Contains("--sql")) await SqlChecks.Run();
+
+var personSerial = new PersonForm { NameBn = "পরীক্ষা", SerialNumber = " 0012 " };
+Check(personSerial.SerialNumber == "০০১২" && Valid(personSerial), "English serial digits convert to Bengali and preserve leading zeros");
+personSerial.SerialNumber = "০০১২৩৪৫৬৭৮৯";
+Check(personSerial.SerialNumber == "০০১২৩৪৫৬৭৮৯" && Valid(personSerial), "Bengali serial digits remain unchanged");
+personSerial.SerialNumber = "০1২3";
+Check(personSerial.SerialNumber == "০১২৩" && Valid(personSerial), "Mixed serial digits normalize to Bengali");
+personSerial.SerialNumber = "১২ক";
+Check(!Valid(personSerial), "Non-digit serial numbers are rejected");
+personSerial.SerialNumber = new string('১', 51);
+Check(!Valid(personSerial), "Serial numbers longer than 50 digits are rejected");
+personSerial.SerialNumber = " ";
+Check(personSerial.SerialNumber is null && Valid(personSerial), "Serial number remains optional for existing people");
+
+Check(BengaliDigits.SerialKey("০০১") == BengaliDigits.SerialKey("1"), "Leading zeros and digit scripts cannot bypass serial uniqueness");
+Check(BengaliDigits.SerialKey("০") == BengaliDigits.SerialKey("০০০"), "Zero serials share one uniqueness key");
+Check(BengaliDigits.SerialKey(null) is null, "Missing serials have no uniqueness key");
+var serials = new[] { "১০", "০০২", "১", "১০০", "৯" };
+Check(string.Join(",", serials.OrderBy(x => BengaliDigits.SerialKey(x), StringComparer.Ordinal)) == "১,০০২,৯,১০,১০০", "Serial keys sort by numeric value before pagination");
+
+var revisedPayrollExpense = new Expense { Amount = 100 };
+revisedPayrollExpense.Submit(true); revisedPayrollExpense.Review(true, "admin", "approved");
+revisedPayrollExpense.RevisePayroll(TempleDate.Today, 125, "updated salary");
+Check(revisedPayrollExpense.Amount == 125 && revisedPayrollExpense.Status == ApprovalStatus.Submitted && revisedPayrollExpense.ReviewedBy is null && revisedPayrollExpense.ReviewedAt is null, "Editing approval-required payroll updates expense and requires fresh approval");
+var directPayrollExpense = new Expense { Amount = 100 }; directPayrollExpense.Submit(false);
+directPayrollExpense.RevisePayroll(TempleDate.Today, 150, "updated");
+Check(directPayrollExpense.Amount == 150 && directPayrollExpense.Status == ApprovalStatus.Approved, "Payroll without approval remains payable after editing");
+directPayrollExpense.Pay(10);
+prevented = false; try { directPayrollExpense.RevisePayroll(TempleDate.Today, 200, "invalid"); } catch (InvalidOperationException) { prevented = true; }
+Check(prevented && directPayrollExpense.Amount == 150, "Partially paid payroll cannot be edited");
+directPayrollExpense.Pay(140);
+Check(!directPayrollExpense.CanEditPayroll, "Fully paid payroll cannot be edited");
+var cancelledPayrollExpense = new Expense { Amount = 100 }; cancelledPayrollExpense.Submit(false); cancelledPayrollExpense.CancelApproved();
+Check(!cancelledPayrollExpense.CanEditPayroll, "Cancelled payroll cannot be edited");
+var editPayrollForm = new PayrollEditForm { RowVersion = "version", ExpenseVersion = "version", Month = new DateOnly(TempleDate.Today.Year, TempleDate.Today.Month, 1), Date = TempleDate.Today, BaseSalary = 100, Allowance = 20, Deduction = 10 };
+Check(Valid(editPayrollForm), "Valid payroll changes are accepted");
+editPayrollForm.Deduction = 120;
+Check(!Valid(editPayrollForm), "Payroll edit rejects zero payable salary");
+editPayrollForm.Deduction = 0; editPayrollForm.BaseSalary = 100.001m;
+Check(!Valid(editPayrollForm), "Payroll edit rejects fractional paisa");

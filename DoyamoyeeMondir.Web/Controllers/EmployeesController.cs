@@ -74,6 +74,55 @@ public class EmployeesController(ApplicationDbContext db) : Controller
         }
         return RedirectToAction(nameof(Payroll));
     }
+    public async Task<IActionResult> EditPayroll(int id)
+    {
+        var p = await db.PayrollEntries.AsNoTracking().Include(x => x.Expense).SingleOrDefaultAsync(x => x.Id == id);
+        if (p is null) return NotFound();
+        if (!p.Expense.CanEditPayroll) return Conflict("শুধু অপরিশোধিত বেতন সম্পাদনা করা যাবে।");
+        ViewBag.EmployeeName = p.EmployeeName;
+        return View(new PayrollEditForm { Id = p.Id, Month = p.Month, Date = p.Expense.Date,
+            BaseSalary = p.BaseSalary, Allowance = p.Allowance, Deduction = p.Deduction,
+            RowVersion = Convert.ToBase64String(p.RowVersion), ExpenseVersion = Convert.ToBase64String(p.Expense.RowVersion) });
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditPayroll(int id, PayrollEditForm f)
+    {
+        if (id != f.Id) return BadRequest();
+        var p = await db.PayrollEntries.Include(x => x.Expense).Include(x => x.Employee).SingleOrDefaultAsync(x => x.Id == id);
+        if (p is null) return NotFound();
+        ViewBag.EmployeeName = p.EmployeeName;
+        if (!p.Expense.CanEditPayroll) return Conflict("শুধু অপরিশোধিত বেতন সম্পাদনা করা যাবে।");
+        if (f.Month < new DateOnly(p.Employee.JoinedOn.Year, p.Employee.JoinedOn.Month, 1) || f.Date < p.Employee.JoinedOn)
+            ModelState.AddModelError("", "যোগদানের আগের বেতন নথিভুক্ত করা যাবে না।");
+        if (await db.PayrollEntries.AnyAsync(x => x.Id != id && x.EmployeeId == p.EmployeeId && x.Month == f.Month))
+            ModelState.AddModelError(nameof(f.Month), "এই মাসের বেতন ইতিমধ্যে নথিভুক্ত হয়েছে।");
+        var lastPayment = await db.ExpensePayments.Where(x => x.ExpenseId == p.ExpenseId).MaxAsync(x => (DateOnly?)x.Date);
+        if (lastPayment.HasValue && f.Date < lastPayment.Value)
+            ModelState.AddModelError(nameof(f.Date), "আগের পরিশোধের তারিখের আগে ব্যয়ের তারিখ দেওয়া যাবে না।");
+        if (!ModelState.IsValid) return View(f);
+        try
+        {
+            db.Entry(p).Property(x => x.RowVersion).OriginalValue = Convert.FromBase64String(f.RowVersion);
+            db.Entry(p.Expense).Property(x => x.RowVersion).OriginalValue = Convert.FromBase64String(f.ExpenseVersion);
+        }
+        catch (FormatException) { return BadRequest(); }
+        p.Month = f.Month; p.BaseSalary = f.BaseSalary; p.Allowance = f.Allowance; p.Deduction = f.Deduction;
+        p.Expense.RevisePayroll(f.Date, f.BaseSalary + f.Allowance - f.Deduction, $"বেতন: {p.EmployeeName}, {f.Month:yyyy-MM}");
+        // Always check both row versions, including edits which only change the date.
+        db.Entry(p).Property(x => x.Month).IsModified = true;
+        db.Entry(p.Expense).Property(x => x.Amount).IsModified = true;
+        try { await db.SaveChangesAsync(); }
+        catch (DbUpdateConcurrencyException) { return Conflict("বেতন বা পরিশোধের তথ্য পরিবর্তিত হয়েছে। তালিকা থেকে আবার খুলুন।"); }
+        catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException sql && sql.Number is 2601 or 2627)
+        {
+            ModelState.AddModelError(nameof(f.Month), "এই মাসের বেতন ইতিমধ্যে নথিভুক্ত হয়েছে।");
+            return View(f);
+        }
+        TempData["PayrollSuccess"] = "বেতনের তথ্য সংরক্ষণ করা হয়েছে।";
+        return RedirectToAction(nameof(Payroll));
+    }
+
     private async Task Choices(Employee e)
     {
         ViewBag.Employee=e;

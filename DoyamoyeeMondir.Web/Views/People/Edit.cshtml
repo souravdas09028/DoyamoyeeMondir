@@ -3,7 +3,7 @@
 <div class="container-xl py-4"><h1>@ViewData["Title"]</h1>
 <form method="post" asp-action="Edit" class="card card-body mt-3" style="max-width:720px">
 <div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Id" type="hidden"/><input asp-for="RowVersion" type="hidden"/>
-<label asp-for="SerialNumber" class="form-label">ক্রমিক নং</label><input asp-for="SerialNumber" class="form-control mb-3" maxlength="50"/><span asp-validation-for="SerialNumber" class="text-danger"></span>
+<label asp-for="SerialNumber" class="form-label">ক্রমিক নং</label><input asp-for="SerialNumber" class="form-control mb-3" maxlength="50" inputmode="numeric" lang="bn" pattern="[০-৯]+" placeholder="যেমন: ০০১"/><span asp-validation-for="SerialNumber" class="text-danger"></span>
 <label asp-for="NameBn" class="form-label">নাম (বাংলা)</label><input asp-for="NameBn" class="form-control mb-3"/>
 <label asp-for="NameEn" class="form-label">নাম (ইংরেজি, ঐচ্ছিক)</label><input asp-for="NameEn" class="form-control mb-3"/>
 <label asp-for="FatherName" class="form-label">পিতার নাম</label><input asp-for="FatherName" class="form-control mb-3"/>
@@ -14,3 +14,19 @@
 <label class="form-check mb-3"><input asp-for="IsActive" class="form-check-input"/><span class="form-check-label">সক্রিয়</span></label>
 <div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Index" class="btn btn-outline-secondary">তালিকায় ফিরুন</a></div>
 </form></div>
+
+@section Scripts {
+<script>
+(() => {
+    const input = document.getElementById('SerialNumber');
+    const normalize = () => {
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        input.value = input.value.replace(/[0-9]/g, digit => '০১২৩৪৫৬৭৮৯'[Number(digit)]);
+        input.setSelectionRange(start, end);
+    };
+    input.addEventListener('input', normalize);
+    normalize();
+})();
+</script>
+}

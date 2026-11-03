@@ -1,0 +1,14 @@
+@model DoyamoyeeMondir.Web.Models.PayrollEditForm
+@{ ViewData["Title"] = "বেতন সম্পাদনা"; }
+<div class="container-xl py-4"><h1>বেতন সম্পাদনা</h1><p>@ViewBag.EmployeeName</p>
+<p>প্রদেয় বেতন = মূল বেতন + ভাতা − কর্তন। অনুমোদন প্রয়োজন হলে সম্পাদনার পরে আবার অনুমোদন নিতে হবে।</p>
+<form asp-action="EditPayroll" asp-route-id="@Model.Id" method="post" class="card card-body" style="max-width:640px">
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<input asp-for="Id" type="hidden"/><input asp-for="RowVersion" type="hidden"/><input asp-for="ExpenseVersion" type="hidden"/>
+<label asp-for="Month">বেতনের মাস (মাসের প্রথম দিন)</label><input asp-for="Month" type="date" class="form-control mb-3"/>
+<label asp-for="Date">ব্যয়ের তারিখ</label><input asp-for="Date" type="date" class="form-control mb-3"/>
+<label asp-for="BaseSalary">মূল বেতন (টাকা)</label><input asp-for="BaseSalary" type="number" min="0" step="0.01" class="form-control mb-3"/>
+<label asp-for="Allowance">ভাতা (টাকা)</label><input asp-for="Allowance" type="number" min="0" step="0.01" class="form-control mb-3"/>
+<label asp-for="Deduction">কর্তন (টাকা)</label><input asp-for="Deduction" type="number" min="0" step="0.01" class="form-control mb-3"/>
+<div><button class="btn btn-primary">সংরক্ষণ করুন</button> <a asp-action="Payroll" class="btn btn-outline-secondary">ফিরুন</a></div>
+</form></div>

@@ -18,6 +18,22 @@ public class Expense : BaseAuditableEntity
     public Guid SubmissionKey { get; set; }
     public decimal PaidAmount { get; private set; }
 
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public bool CanEditPayroll => PaidAmount == 0 && Status is ApprovalStatus.Submitted or ApprovalStatus.Approved or ApprovalStatus.Rejected;
+
+    public void RevisePayroll(DateOnly date, decimal amount, string description)
+    {
+        if (!CanEditPayroll || amount <= 0 || decimal.Round(amount, 2) != amount)
+            throw new InvalidOperationException("Only unpaid payroll expenses can be edited with a positive amount.");
+        Date = date;
+        Amount = amount;
+        Description = description;
+        Status = RequiresApproval ? ApprovalStatus.Submitted : ApprovalStatus.Approved;
+        ReviewedBy = null;
+        ReviewedAt = null;
+        ReviewNote = null;
+    }
+
     public void Pay(decimal amount)
     {
         if (Status != ApprovalStatus.Approved || amount <= 0 || decimal.Round(amount, 2) != amount || amount > Amount - PaidAmount)

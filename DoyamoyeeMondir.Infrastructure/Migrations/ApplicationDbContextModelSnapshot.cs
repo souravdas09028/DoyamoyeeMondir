@@ -1334,6 +1334,12 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("SerialNumberKey")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasComputedColumnSql("CASE WHEN NULLIF(LTRIM(RTRIM([SerialNumber])), N'') IS NULL THEN NULL ELSE RIGHT(REPLICATE(N'0', 50) + TRANSLATE(LTRIM(RTRIM([SerialNumber])), N'০১২৩৪৫৬৭৮৯', N'0123456789'), 50) END", true);
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -1341,6 +1347,10 @@ namespace DoyamoyeeMondir.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SerialNumberKey")
+                        .IsUnique()
+                        .HasFilter("[SerialNumber] IS NOT NULL");
 
                     b.ToTable("Persons", (string)null);
                 });

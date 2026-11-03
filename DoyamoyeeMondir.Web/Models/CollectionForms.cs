@@ -10,7 +10,13 @@ public static class TempleDate
 
 public class PersonForm
 {
-    [StringLength(50)] public string? SerialNumber { get; set; }
+    private string? serialNumber;
+    [StringLength(50), RegularExpression("^[০-৯]+$", ErrorMessage = "ক্রমিক নম্বর শুধু বাংলা অঙ্কে লিখুন।")]
+    public string? SerialNumber
+    {
+        get => serialNumber;
+        set => serialNumber = BengaliDigits.Normalize(value);
+    }
     public int Id { get; set; }
     [Required(ErrorMessage = "নাম লিখুন।"), StringLength(200)] public string NameBn { get; set; } = "";
     [StringLength(200)] public string? NameEn { get; set; }

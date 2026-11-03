@@ -35,3 +35,22 @@ public class PayrollForm : IValidatableObject
         if (decimal.Round(Allowance, 2) != Allowance || decimal.Round(Deduction, 2) != Deduction) yield return new("সর্বোচ্চ দুই ঘর দশমিক ব্যবহার করুন।");
     }
 }
+
+public class PayrollEditForm : IValidatableObject
+{
+    public int Id { get; set; }
+    [Required] public string RowVersion { get; set; } = "";
+    [Required] public string ExpenseVersion { get; set; } = "";
+    public DateOnly Month { get; set; }
+    public DateOnly Date { get; set; }
+    [Range(typeof(decimal), "0", "999999999999.99")] public decimal BaseSalary { get; set; }
+    [Range(typeof(decimal), "0", "999999999999.99")] public decimal Allowance { get; set; }
+    [Range(typeof(decimal), "0", "999999999999.99")] public decimal Deduction { get; set; }
+    public IEnumerable<ValidationResult> Validate(ValidationContext context)
+    {
+        if (Month == default || Month.Day != 1 || Month > TempleDate.Today) yield return new("বেতনের মাসের প্রথম দিন নির্বাচন করুন। ভবিষ্যৎ মাস গ্রহণযোগ্য নয়।");
+        if (Date < Month || Date > TempleDate.Today) yield return new("ব্যয়ের তারিখ বেতনের মাস থেকে আজকের মধ্যে হতে হবে।");
+        if (BaseSalary + Allowance <= Deduction) yield return new("প্রদেয় বেতন শূন্যের বেশি হতে হবে।");
+        if (decimal.Round(BaseSalary, 2) != BaseSalary || decimal.Round(Allowance, 2) != Allowance || decimal.Round(Deduction, 2) != Deduction) yield return new("সর্বোচ্চ দুই ঘর দশমিক ব্যবহার করুন।");
+    }
+}
