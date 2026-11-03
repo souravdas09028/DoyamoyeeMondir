@@ -1,7 +1,7 @@
 @model DoyamoyeeMondir.Web.Models.CommitteeMemberForm
-@{ var committee = (DoyamoyeeMondir.Domain.Entities.Committee)ViewBag.Committee; var members = (List<DoyamoyeeMondir.Domain.Entities.CommitteeMember>)ViewBag.Members; ViewData["Title"] = "কমিটির সদস্য"; }
+@{ int serialNumber = 0; var committee = (DoyamoyeeMondir.Domain.Entities.Committee)ViewBag.Committee; var members = (List<DoyamoyeeMondir.Domain.Entities.CommitteeMember>)ViewBag.Members; ViewData["Title"] = "কমিটির সদস্য"; }
 <div class="container-xl py-4"><h1>@committee.NameBn — সদস্য ও পদ</h1><p>@committee.StartDate.ToString("yyyy-MM-dd") — @committee.EndDate.ToString("yyyy-MM-dd")</p>
-<div class="card table-responsive mb-3"><table class="table"><thead><tr><th>নাম</th><th>পদ</th><th>মোবাইল</th></tr></thead><tbody>@foreach(var m in members) { <tr><td>@m.Person.NameBn</td><td>@m.Position</td><td>@m.Person.MobileNumber</td></tr> }@if(members.Count == 0) { <tr><td colspan="3">সদস্য যোগ করুন।</td></tr> }</tbody></table></div>
+<div class="card table-responsive mb-3"><table class="table"><thead><tr><th scope="col">ক্রমিক নং</th><th>নাম</th><th>পদ</th><th>মোবাইল</th></tr></thead><tbody>@foreach(var m in members) { <tr><td>@(++serialNumber)</td><td>@m.Person.NameBn</td><td>@m.Position</td><td>@m.Person.MobileNumber</td></tr> }@if(members.Count == 0) { <tr><td colspan="4">সদস্য যোগ করুন।</td></tr> }</tbody></table></div>
 <form asp-action="Members" method="post" class="card card-body" style="max-width:720px"><h2 class="h3">সদস্য যোগ করুন</h2><div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="CommitteeId" type="hidden"/>
 <label asp-for="PersonId">ব্যক্তি</label><select asp-for="PersonId" asp-items="ViewBag.People" class="form-select mb-3"><option value="">নির্বাচন করুন</option></select>
 <label asp-for="Position">পদ</label><input asp-for="Position" class="form-control mb-3"/>

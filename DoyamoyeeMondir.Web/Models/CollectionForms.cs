@@ -13,6 +13,8 @@ public class PersonForm
     public int Id { get; set; }
     [Required(ErrorMessage = "নাম লিখুন।"), StringLength(200)] public string NameBn { get; set; } = "";
     [StringLength(200)] public string? NameEn { get; set; }
+    [StringLength(200)] public string? FatherName { get; set; }
+    [StringLength(200)] public string? MotherName { get; set; }
     [StringLength(20)] public string? MobileNumber { get; set; }
     [EmailAddress(ErrorMessage = "সঠিক ইমেইল লিখুন।"), StringLength(200)] public string? Email { get; set; }
     [StringLength(1000)] public string? AddressBn { get; set; }
