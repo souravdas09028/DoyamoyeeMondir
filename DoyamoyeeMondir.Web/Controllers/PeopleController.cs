@@ -24,7 +24,7 @@ public class PeopleController(ApplicationDbContext db) : Controller
         if (id == 0) return View(new PersonForm());
         var p = await db.Persons.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
         if (p is null) return NotFound();
-        return View(new PersonForm { Id = p.Id, NameBn = p.NameBn, NameEn = p.NameEn, FatherName = p.FatherName, MotherName = p.MotherName, MobileNumber = p.MobileNumber, Email = p.Email, AddressBn = p.AddressBn, IsActive = p.IsActive, RowVersion = Convert.ToBase64String(p.RowVersion) });
+        return View(new PersonForm { Id = p.Id, SerialNumber = p.SerialNumber, NameBn = p.NameBn, NameEn = p.NameEn, FatherName = p.FatherName, MotherName = p.MotherName, MobileNumber = p.MobileNumber, Email = p.Email, AddressBn = p.AddressBn, IsActive = p.IsActive, RowVersion = Convert.ToBase64String(p.RowVersion) });
     }
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -39,6 +39,7 @@ public class PeopleController(ApplicationDbContext db) : Controller
             try { db.Entry(p).Property(x => x.RowVersion).OriginalValue = Convert.FromBase64String(form.RowVersion ?? ""); }
             catch (FormatException) { return BadRequest(); }
         }
+        p.SerialNumber = string.IsNullOrWhiteSpace(form.SerialNumber) ? null : form.SerialNumber.Trim();
         p.NameBn = form.NameBn.Trim(); p.NameEn = form.NameEn?.Trim(); p.MobileNumber = form.MobileNumber?.Trim();
         p.FatherName = form.FatherName?.Trim(); p.MotherName = form.MotherName?.Trim();
         p.Email = form.Email?.Trim(); p.AddressBn = form.AddressBn?.Trim(); p.IsActive = form.IsActive;

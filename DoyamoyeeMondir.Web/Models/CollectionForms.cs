@@ -10,6 +10,7 @@ public static class TempleDate
 
 public class PersonForm
 {
+    [StringLength(50)] public string? SerialNumber { get; set; }
     public int Id { get; set; }
     [Required(ErrorMessage = "নাম লিখুন।"), StringLength(200)] public string NameBn { get; set; } = "";
     [StringLength(200)] public string? NameEn { get; set; }

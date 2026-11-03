@@ -1,4 +1,4 @@
-﻿using DoyamoyeeMondir.Domain.Entities;
+using DoyamoyeeMondir.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +14,8 @@ public class PersonConfiguration
         builder.ToTable("Persons");
 
         builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.SerialNumber).HasMaxLength(50);
 
         builder.Property(x => x.NameBn)
             .HasMaxLength(200)
